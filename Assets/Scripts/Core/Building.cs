@@ -1,18 +1,30 @@
+using System;
 using System.Collections.Generic;
+using Game.Shared.Core;
 using UnityEngine;
 
 public class Building : IBuilding
 {
+    private readonly List<IBuildingBehaviour> _behaviours = new();
+    
+    private event Action<IBuilding> OnDeath;
+    private int HitPoints { get; set; }
+    
+    public Transform Transform { get; }
     public string Name { get; private set; }
     public int Player { get; }
-    private int HitPoints { get; set; }
     public Vector3Int Origin { get; private set; }
     public Vector3Int Size { get; }
     public int MaxHitPoints { get; private set; }
-    public GameObject GameObject { get; }
+    public ILogger Logger { get; }
 
-    private List<IBuildingBehaviour> behaviours = new();
 
+
+    public IBuilding GetTarget() => this;
+    public void AddBehaviour(IBuildingBehaviour behaviour) => _behaviours.Add(behaviour);
+    public void AddOnDeathListener(Action<ITargetable> listener) => OnDeath += listener;
+    public void RemoveOnDeathListener(Action<ITargetable> listener) => OnDeath -= listener;
+    
     public Building(string name, Vector3Int size, int player, int hp, IContext context = null)
     {
         Name = name;
@@ -20,15 +32,19 @@ public class Building : IBuilding
         Player = player;
         HitPoints = hp;
         MaxHitPoints = hp;
+        Logger = context?.Resolve<ILogger>();
     }
 
-    public void AddBehaviour(IBuildingBehaviour behaviour)
+    
+    public T GetBehaviour<T>() where T : class, IBuildingBehaviour
     {
-		behaviours.Add(behaviour);
+        foreach (var b in _behaviours)
+            if (b is T t)
+                return t;
+        return null;
     }
-
 	public void Tick(float deltaTime) {
-		foreach (var b in behaviours)
+		foreach (var b in _behaviours)
 			b.OnTick(deltaTime);
 	}	
 

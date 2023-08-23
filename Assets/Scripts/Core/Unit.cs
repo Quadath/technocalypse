@@ -11,11 +11,12 @@ namespace Game.Core
         public int Player { get; }
         public float DetectionRange { get; } = 20;
         private readonly List<IUnitBehaviour> _behaviours = new();
+        private readonly ILogger _logger;
+        private readonly PathfindingGrid _pathfindingGrid;
 
         private event Action<Unit> OnDeath;
         private int _maxHitPoints;
         private int _hitPoints;
-        private ILogger _logger;
 
         public string DisplayedName { get; }
         public float Speed { get; }
@@ -24,18 +25,31 @@ namespace Game.Core
         public Vector3 NextPathPointPosition { get; set; }
         public Vector3 TargetDirection { get; set; }
         public Vector3 GoalPosition { get; set; }
-        public bool HasGoal => GoalPosition != Vector3.zero;
-        public PathfindingGrid PathfindingGrid;
         public bool IsAlive => _hitPoints > 0;
-        public string Message { get; private set; }
-        public event Action<string, string> OnMessage;
-
+        public bool HasGoal => GoalPosition != Vector3.zero;
+        public IUnit GetTarget() => this;
         public Action<IUnit> callback { get; set; }
 
         ~Unit()
         {
-            callback(null);
+            _logger.Log("Unit", "Unit destroyed", "brown");
         }
+        public void AddBehaviour(IUnitBehaviour b) => _behaviours.Add(b);
+        void ITargetable.AddOnDeathListener(Action<ITargetable> listener)
+        {
+            // Wrap listener to convert ITargetable -> IUnit
+            OnDeath += listener;
+        }
+    
+        // Optional: type-safe version for IUnit users
+        public void AddOnDeathListener(Action<IUnit> listener) => OnDeath += listener;
+        void ITargetable.RemoveOnDeathListener(Action<ITargetable> listener)
+        {
+            // Wrap listener to convert ITargetable -> IUnit
+            OnDeath -= listener;
+        }
+        public void RemoveOnDeathListener(Action<IUnit> listener) => OnDeath -= listener;
+
 
         public Unit(string displayedName, int player, Transform transform, Rigidbody rigidbody, float speed, int hp, IContext ctx)
         {
@@ -47,6 +61,7 @@ namespace Game.Core
             _hitPoints = hp;
             _maxHitPoints = hp;
             _logger = ctx?.Resolve<ILogger>();
+            _pathfindingGrid = ctx?.Resolve<PathfindingGrid>();
         }
 
         public void Tick(float deltaTime)
@@ -61,14 +76,9 @@ namespace Game.Core
             var mb = GetBehaviour<MoveBehaviour>();
             var start = Vector3Int.RoundToInt(Transform.position);
             var finder = new AStar3D();
-            var gridPath = finder.FindPath(start, g, pos => PathfindingGrid.IsWalkable(pos));
+            var gridPath = finder.FindPath(start, g, pos => _pathfindingGrid.IsWalkable(pos));
             if (mb != null) mb.SetPath(gridPath);
         }
-
-        public void AddBehaviour(IUnitBehaviour b) => _behaviours.Add(b);
-        public void AddOnDeathListener(Action<IUnit> listener) => OnDeath += listener;
-        public void RemoveOnDeathListener(Action<IUnit> listener) => OnDeath -= listener;
-
         public T GetBehaviour<T>() where T : class, IUnitBehaviour
         {
             foreach (var b in _behaviours)
@@ -85,20 +95,12 @@ namespace Game.Core
                 Die();
                 return;
             }
-
-            DebugMessage("Unit", $"got damage. HP is {_hitPoints}");
         }
 
         private void Die()
         {
             _logger.Log("Core", "I died :(", "green");
             OnDeath?.Invoke(this);
-        }
-
-        public void DebugMessage(string source, string msg)
-        {
-            Message = msg;
-            OnMessage?.Invoke(source, Message);
         }
     }
 }

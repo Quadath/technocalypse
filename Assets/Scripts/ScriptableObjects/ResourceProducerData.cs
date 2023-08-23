@@ -1,3 +1,4 @@
+using Game.Core.Behaviours;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Behaviour/Building/ResourceProducerData")]
@@ -9,6 +10,6 @@ public class ResourceProducerData : BuildingBehaviourData {
     public override IBuildingBehaviour CreateBehaviour(IBuilding owner, IServiceProvider services)
     {
         var manager = services.Get<IResourceManager>();
-        return new ResourceProducer(resource.resourceTypeID, amountPerPeriod, tickInterval, manager);
+        return new ResourceProducer(owner, resource.resourceTypeID, amountPerPeriod, tickInterval, manager);
     }
 }

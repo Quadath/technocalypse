@@ -27,6 +27,7 @@ public class BuildingSpawner : ServiceConsumer, IBuildingSpawner
         //Розрахунок коордиантів будівлі, щоб вона стояла за сіткою
         Vector3 worldPos = placePos + buildingData.Size / 2 - new Vector3(0f, buildingData.Size.y / 2f, 0f);
         GameObject newObj = Instantiate(buildingData.Prefab, worldPos, rot);
+        newObj.transform.position = new Vector3(placePos.x, placePos.y, placePos.z);
         
         //Створення DI контейнеру, що передає необхідні сервіси
         var logger = newObj.AddComponent<Logger>();

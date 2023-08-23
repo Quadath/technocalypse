@@ -1,25 +1,32 @@
-public class ResourceProducer : IBuildingBehaviour
-{
-    private readonly ResourceTypeID _resource;
-    private readonly int _amount;
-    private readonly float _interval;
-    private readonly IResourceManager _manager;
-    
-    private float _timer;
+using Game.Shared.Core;
 
-    public ResourceProducer(ResourceTypeID resource, int amount, float interval, IResourceManager manager)
+namespace Game.Core.Behaviours
+{ 
+    public class ResourceProducer : IBuildingBehaviour
     {
-        _resource = resource;
-        _amount = amount;
-        _interval = interval;
-        _manager = manager;
-    }
+        private readonly ResourceTypeID _resource;
+        private readonly int _amount;
+        private readonly float _interval;
+        private readonly IResourceManager _manager;
+        private readonly StorageBehaviour _storage;
+        
+        private float _timer;
 
-    public void OnTick(float deltaTime)
-    {
-        _timer += deltaTime;
-        if (!(_timer >= _interval)) return;
-        _timer -= _interval;
-        _manager.AddResource(_resource, _amount);
+        public ResourceProducer(IBuilding parent, ResourceTypeID resource, int amount, float interval, IResourceManager manager)
+        {
+            _resource = resource;
+            _amount = amount;
+            _interval = interval;
+            _manager = manager;
+            _storage = parent.GetBehaviour<StorageBehaviour>();
+        }
+
+        public void OnTick(float deltaTime)
+        {
+            _timer += deltaTime;
+            if (!(_timer >= _interval)) return;
+            _timer -= _interval;
+            _manager.AddResource(_resource, _amount);
+        }
     }
 }

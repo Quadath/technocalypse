@@ -44,7 +44,6 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     public void SelectBuilding(IBuildingData data)
     {
         _selectedBuilding = data;
-        Debug.Log("Selected: " + _selectedBuilding.Name);
         Destroy(_previewObject);
         _previewObject = SpawnPreviewObject();
     }

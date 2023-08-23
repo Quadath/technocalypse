@@ -44,10 +44,10 @@ public class BuildingGrid
                 }
 
         // Можна відразу встановити позицію у сцені
-        if (b.GameObject)
-        {
-            b.GameObject.transform.position = new Vector3(x, y, z);
-        }
+        // if (b.GameObject)
+        // {
+        //     b.GameObject.transform.position = new Vector3(x, y, z);
+        // }
 
         return true;
     }

@@ -42,12 +42,12 @@ public class UnitManager : MonoBehaviour
     public void Register(IUnit u)
     {
 	    units.Add(u);
-	    u.AddOnDeathListener(Unregister);
+        u.AddOnDeathListener(t => Unregister((IUnit)t));
     }
 
-    public void Unregister(IUnit u)
+    private void Unregister(IUnit u)
     {
-        u.RemoveOnDeathListener(Unregister);
+        u.RemoveOnDeathListener(t => Unregister((IUnit)t));
         bool removed = units.Remove(u);
 	    selectedUnits.Remove(u);
     }

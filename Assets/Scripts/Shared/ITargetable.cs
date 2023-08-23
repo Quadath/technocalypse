@@ -7,7 +7,7 @@ namespace Game.Shared.Core
     {
         Transform Transform { get; }
         void TakeDamage(int amount);
-        public void AddOnDeathListener(Action<IUnit> listener);
-        public void RemoveOnDeathListener(Action<IUnit> listener);
+        public void AddOnDeathListener(Action<ITargetable> listener);
+        public void RemoveOnDeathListener(Action<ITargetable> listener);
     }
 }

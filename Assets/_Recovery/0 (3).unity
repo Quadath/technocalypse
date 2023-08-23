@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 200698479}
   - component: {fileID: 200698480}
   - component: {fileID: 200698481}
+  - component: {fileID: 200698483}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -334,6 +335,18 @@ MonoBehaviour:
     player: 1
     Position: {x: 70, y: 13, z: 4}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &200698483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200698471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce83c3b6ec3b24c4490728eba4863717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::Game.Systems.LeakCheckBehaviour
 --- !u!1 &257479745
 GameObject:
   m_ObjectHideFlags: 0

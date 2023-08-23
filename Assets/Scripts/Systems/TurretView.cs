@@ -37,9 +37,9 @@
          // Debug.Log($"Angle: {angle}");
      }
 
-     private void OnUnitDeath(IUnit u)
+     private void OnUnitDeath(ITargetable target)
      {
-         u.RemoveOnDeathListener(OnUnitDeath);
+         target.RemoveOnDeathListener(OnUnitDeath);
          _unitCore = null;
      }
  }

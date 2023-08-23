@@ -10,10 +10,13 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
 {
     [SerializeField] private WorldManager manager;
     
+    private PathfindingGrid _pathfindingGrid;
+    
 	public List<UnitSpawnData> units;
 
     void Start()
     {
+        _pathfindingGrid = manager.PathfindingGrid;
         foreach (var u in units)
         {
 			SpawnAt(u.Position, u.Rotation, u.unitData, u.player);
@@ -26,11 +29,9 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
         var rb = go.GetComponent<Rigidbody>();
         var ctx = new Context();
         ctx.Register<ILogger>(go.AddComponent<Logger>());
-        
-        IUnit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints, ctx)
-            {
-                PathfindingGrid = manager.PathfindingGrid
-            };
+        ctx.Register<PathfindingGrid>(_pathfindingGrid);
+
+        IUnit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints, ctx);
         LeakTracker.Register(unitCore);
         
         // 1) створюємо core

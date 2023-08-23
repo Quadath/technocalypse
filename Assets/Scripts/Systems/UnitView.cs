@@ -60,9 +60,9 @@ public class UnitView : MonoBehaviour
 		    _shootEffect.Play();
     }
     
-    private void OnUnitDeath(IUnit unit)
+    private void OnUnitDeath(ITargetable target)
     {
-        unit.RemoveOnDeathListener(OnUnitDeath);
+        target.RemoveOnDeathListener(OnUnitDeath);
 		if (!_deathExplosionPrefab)
 		{
 			_deathExplosionPrefab = Resources.Load<GameObject>("PixelExplosion");

@@ -80,13 +80,13 @@ public class AttackBehaviour: IUnitBehaviour
         Target = null;
     }
 
-    private void OnCoreDied(IUnit u)
+    private void OnCoreDied(ITargetable u)
     {
         u.RemoveOnDeathListener(OnCoreDied);
         _shootRequirements = null;
     }
 
-    private void TargetDeathListener(IUnit u)
+    private void TargetDeathListener(ITargetable u)
     {
         u.RemoveOnDeathListener(TargetDeathListener);
         Target = null;

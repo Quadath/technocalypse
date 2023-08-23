@@ -1,4 +1,4 @@
 public interface IContext
 {
-    T Resolve<T>();
+    T Resolve<T>() where T : class;
 }

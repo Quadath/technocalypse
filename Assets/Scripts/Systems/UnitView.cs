@@ -17,7 +17,7 @@ public class UnitView : MonoBehaviour
 
     void Awake()
     {
-        _test = new Unit("penis", 0, null, null, 2, 100);
+        _test = new Unit("penis", 0, null, null, 2, 100, null);
 	    _rb = GetComponent<Rigidbody>();
 	    if (!_shootEffect)
 	    {
@@ -62,7 +62,6 @@ public class UnitView : MonoBehaviour
     
     private void OnUnitDeath(IUnit unit)
     {
-        DebugUtil.Log(GetType().Name, $"OnUnitDeath: {unit}");
         unit.RemoveOnDeathListener(OnUnitDeath);
 		if (!_deathExplosionPrefab)
 		{

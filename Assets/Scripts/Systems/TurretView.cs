@@ -39,7 +39,6 @@
 
      private void OnUnitDeath(IUnit u)
      {
-         DebugUtil.Log(GetType().Name, $"OnUnitDeath: {u}");
          u.RemoveOnDeathListener(OnUnitDeath);
          _unitCore = null;
      }

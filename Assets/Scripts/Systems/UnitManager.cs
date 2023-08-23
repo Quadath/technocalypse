@@ -47,10 +47,8 @@ public class UnitManager : MonoBehaviour
 
     public void Unregister(IUnit u)
     {
-        DebugUtil.Log(GetType().Name, $"Unregistered unit: {u}");
         u.RemoveOnDeathListener(Unregister);
         bool removed = units.Remove(u);
-        Debug.Log("Removed? " + removed);
 	    selectedUnits.Remove(u);
     }
 

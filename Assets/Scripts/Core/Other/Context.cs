@@ -9,8 +9,12 @@ public class Context : IContext
         services[typeof(T)] = instance;
     }
 
-    public T Resolve<T>()
+    public T Resolve<T>() where T : class
     {
-        return (T)services[typeof(T)];
+        if (services.TryGetValue(typeof(T), out var instance))
+            return (T)instance;
+
+        throw new InvalidOperationException($"Service {typeof(T)} is not registered");
     }
+
 }

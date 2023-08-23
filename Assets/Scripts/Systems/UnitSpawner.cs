@@ -4,11 +4,12 @@ using Game.Core;
 using Game.Shared.Core;
 using Game.Shared.SO;
 using Game.Shared.Systems;
+using Game.Systems;
 
 public class UnitSpawner : MonoBehaviour, IUnitSpawner
 {
     [SerializeField] private WorldManager manager;
-
+    
 	public List<UnitSpawnData> units;
 
     void Start()
@@ -23,11 +24,15 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
     {
 		var go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
         var rb = go.GetComponent<Rigidbody>();
-        IUnit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints)
+        var ctx = new Context();
+        ctx.Register<ILogger>(go.AddComponent<Logger>());
+        
+        IUnit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints, ctx)
             {
                 PathfindingGrid = manager.PathfindingGrid
             };
-
+        LeakTracker.Register(unitCore);
+        
         // 1) створюємо core
         //var move = new MoveBehaviour(unitCore);
         //unitCore.AddBehaviour(move);

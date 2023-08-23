@@ -15,6 +15,7 @@ namespace Game.Core
         private event Action<Unit> OnDeath;
         private int _maxHitPoints;
         private int _hitPoints;
+        private ILogger _logger;
 
         public string DisplayedName { get; }
         public float Speed { get; }
@@ -36,7 +37,7 @@ namespace Game.Core
             callback(null);
         }
 
-        public Unit(string displayedName, int player, Transform transform, Rigidbody rigidbody, float speed, int hp)
+        public Unit(string displayedName, int player, Transform transform, Rigidbody rigidbody, float speed, int hp, IContext ctx)
         {
             DisplayedName = displayedName;
             Player = player;
@@ -45,6 +46,7 @@ namespace Game.Core
             Speed = speed;
             _hitPoints = hp;
             _maxHitPoints = hp;
+            _logger = ctx?.Resolve<ILogger>();
         }
 
         public void Tick(float deltaTime)
@@ -89,6 +91,7 @@ namespace Game.Core
 
         private void Die()
         {
+            _logger.Log("Core", "I died :(", "green");
             OnDeath?.Invoke(this);
         }
 

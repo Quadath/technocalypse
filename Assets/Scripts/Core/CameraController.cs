@@ -22,8 +22,10 @@ public class CameraControllerEuler : MonoBehaviour
 
         // --- Рух ---
         Vector3 move = Vector3.zero;
-        if (Keyboard.current.wKey.isPressed) move += transform.forward;
-        if (Keyboard.current.sKey.isPressed) move -= transform.forward;
+        Vector3 f = transform.forward;
+        Vector3 _forward = new Vector3(f.x, 0, f.z);
+        if (Keyboard.current.wKey.isPressed) move += _forward;
+        if (Keyboard.current.sKey.isPressed) move -= _forward;
         if (Keyboard.current.aKey.isPressed) move -= transform.right;
         if (Keyboard.current.dKey.isPressed) move += transform.right;
         if (Keyboard.current.rKey.isPressed) move += Vector3.up;

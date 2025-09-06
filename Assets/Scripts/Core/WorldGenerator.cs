@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class WorldGenerator
 {
-    public float noiseScale = 0.05f;
+    public float noiseScale = 0.004f;
 
     public void Generate(World world, int width, int height, int depth)
     {

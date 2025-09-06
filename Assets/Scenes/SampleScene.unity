@@ -739,6 +739,10 @@ MonoBehaviour:
   width: 16
   height: 16
   depth: 16
+  vertices: []
+  triangles: 
+  uvs: []
+  mesh: {fileID: 0}
 --- !u!4 &1921209537
 Transform:
   m_ObjectHideFlags: 0

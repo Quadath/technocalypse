@@ -17,60 +17,72 @@ public class ChunkRenderer : MonoBehaviour
     MeshRenderer mr;
     MeshCollider mc;
 
-    void AddAllComponents() {
+    void AddAllComponents()
+    {
         mf = gameObject.AddComponent<MeshFilter>();
         mr = gameObject.AddComponent<MeshRenderer>();
         mc = gameObject.AddComponent<MeshCollider>();
-    }ц
+    }
 
-    public void Rrender(Block[,,] blocks) {
+    public void Render(World world, Vector3Int chunkNumber)
+    {
         vertices = new List<Vector3>();
         triangles = new List<int>();
         uvs = new List<Vector2>();
 
-        width = blocks.GetLength(0);
-        height = blocks.GetLength(1);
-        depth = blocks.GetLength(2);
+        width = world.ChunkSizeX;
+        height = world.ChunkSizeY;
+        depth = world.ChunkSizeZ;
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int z = 0; z < depth; z++)
             {
-                for (int z = 0; z < depth; z++)
+                for (int y = 0; y < height; y++)
                 {
-                    Debug.Log("Block " + x + " " + y + " " + z);
-                    if (blocks[x, y, z].Type != Block.BlockType.Air)
+                    Vector3Int blockPos = new Vector3Int(chunkNumber.x * width + x,
+                            chunkNumber.y * height + y,
+                            chunkNumber.z * depth + z);
+                    if (world.GetBlock(blockPos.x, blockPos.y, blockPos.z).Type != Block.BlockType.Air)
                         continue;
-                    // Check 10 neighbors if has block underneath, otherwise 6
-                    bool hasBlockUnderneath = (y <= 0) ||
-                             (blocks[x, y-1, z].Type != Block.BlockType.Air);
-                    int[] neighbours = new int[10] {0,0,0,0,0,0,0,0,0,0};
-                    bool sideSlope = false;
+                    // Quaternion rotation = Quaternion.identity;
 
-                    for (int face = 0; face < 6 + (4 * (hasBlockUnderneath == true ? 1 : 0)); face++)
+                    // Create the cube
+                    // GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                    // cube.transform.SetPositionAndRotation(blockPos, rotation);
+                    blockPos = new Vector3Int(chunkNumber.x * width + x,
+                            chunkNumber.y * height + y,
+                            chunkNumber.z * depth + z);
+                    bool straightSlopeCreated = false;
+                    foreach (var pattern in VoxelData.StraigtSlopePatterns)
                     {
-                        Debug.Log("Face " + face);
-                        if (face > 3 && sideSlope)
-                            continue; //prevent corner slopes from spawning
-                        Vector3Int neighborOffset = VoxelData.FaceChecks[face];
-                        int nx = x + neighborOffset.x;
-                        int ny = y + neighborOffset.y;
-                        int nz = z + neighborOffset.z;
-
-                        bool neighborIsSolid =
-                            !(nx < 0 || nx >= width ||
-                             ny < 0 || ny >= height ||
-                             nz < 0 || nz >= depth) &&
-                             blocks[nx, ny, nz].Type != Block.BlockType.Air;  
-                        if (neighborIsSolid) {
-                            if (face < 4) 
-                                sideSlope = true;
-                            AddFace(new Vector3Int(x, y, z), face, hasBlockUnderneath);
+                        if (MatchesPattern(blockPos, pattern, world))
+                        {
+                            AddPatternToMesh(pattern, new Vector3Int(x, y, z), vertices, triangles, uvs);
+                        }
+                    }
+                    if (!straightSlopeCreated)
+                    {
+                        foreach (var pattern in VoxelData.CornerSlopePatterns)
+                        {
+                            if (MatchesPattern(blockPos, pattern, world))
+                            {
+                                AddPatternToMesh(pattern, new Vector3Int(x, y, z), vertices, triangles, uvs);
+                            }
+                        }
+                    }
+                    foreach (var pattern in VoxelData.WallsPatterns)
+                    {
+                        if (MatchesPattern(blockPos, pattern, world))
+                        {
+                            AddPatternToMesh(pattern, new Vector3Int(x, y, z), vertices, triangles, uvs);
                         }
                     }
                 }
             }
         }
-        if (mf == null) {
+        if (mf == null)
+        {
             AddAllComponents();
         }
 
@@ -83,25 +95,76 @@ public class ChunkRenderer : MonoBehaviour
         mc.sharedMesh = mesh;
     }
 
-    private void AddFace(Vector3Int pos, int face, bool canBeSlope)
+    private void AddPatternToMesh(VoxelPattern pattern, Vector3Int blockPos,
+        List<Vector3> meshVerts, List<int> meshTris, List<Vector2> meshUvs)
     {
-        int vCount = vertices.Count;
-
-        for (int i = 0; i < 4; i++)
+        int startIndex = meshVerts.Count;
+        foreach (var v in pattern.Vertices)
         {
-            if ((face < 4 || face > 5) && canBeSlope) {
-                vertices.Add(pos + VoxelData.Verts[VoxelData.SlopeTris[face, i]]);
-            } else {
-                vertices.Add(pos + VoxelData.Verts[VoxelData.Tris[face, i]]);
-            }
-            uvs.Add(VoxelData.UVs[i]);
+            meshVerts.Add(blockPos + VoxelData.Verts[v]);
+        }
+        foreach (var t in pattern.Triangles)
+        {
+            meshTris.Add(startIndex + t);
+        }
+        foreach (var uv in pattern.UVs)
+        {
+            meshUvs.Add(uv);
+        }
+    }
+
+    private bool MatchesPattern(Vector3Int pos, VoxelPattern pattern, World world)
+    {
+        foreach (var n in pattern.RequiredNeighbors)
+        {
+            Vector3Int offset = VoxelData.Neighbours[n];
+            var nPos = pos + offset;
+            if (!InBounds(nPos, world) || world.GetBlock(nPos.x, nPos.y, nPos.z).Type == Block.BlockType.Air)
+                return false;
         }
 
-        triangles.Add(vCount + 0);
-        triangles.Add(vCount + 2);
-        triangles.Add(vCount + 1);
-        triangles.Add(vCount + 2);
-        triangles.Add(vCount + 3);
-        triangles.Add(vCount + 1);
+        foreach (var n in pattern.ForbiddenNeighbors)
+        {
+            Vector3Int offset = VoxelData.Neighbours[n];
+            var nPos = pos + offset;
+            if (InBounds(nPos, world) && world.GetBlock(nPos.x, nPos.y, nPos.z).Type != Block.BlockType.Air)
+                return false;
+        }
+
+        return true;
     }
+    
+    private bool InBounds(Vector3Int pos, World world)
+    {
+        return pos.x >= 0 && pos.y >= 0 && pos.z >= 0 &&
+            pos.x < world.Width &&
+            pos.y < world.Height &&
+            pos.z < world.Depth;
+    }
+
+
+    // private void AddFace(Vector3Int pos, int face, bool canBeSlope)
+    // {
+    //     int vCount = vertices.Count;
+
+    //     for (int i = 0; i < 4; i++)
+    //     {
+    //         if ((face < 4 || face > 5) && canBeSlope)
+    //         {
+    //             vertices.Add(pos + VoxelData.Verts[VoxelData.SlopeTris[face, i]]);
+    //         }
+    //         else
+    //         {
+    //             vertices.Add(pos + VoxelData.Verts[VoxelData.Tris[face, i]]);
+    //         }
+    //         uvs.Add(VoxelData.UVs[i]);
+    //     }
+
+    //     triangles.Add(vCount + 0);
+    //     triangles.Add(vCount + 2);
+    //     triangles.Add(vCount + 1);
+    //     triangles.Add(vCount + 2);
+    //     triangles.Add(vCount + 3);
+    //     triangles.Add(vCount + 1);
+    // }
 }

@@ -2,7 +2,7 @@ public class Block
 {
     public BlockType Type { get; private set; }
     public bool IsSlope { get; private set; }
-    public float TraversalCost { get; private set; } // для pathfinding
+    public int TraversalCost { get; private set; } // для pathfinding
 
     public enum BlockType
     {
@@ -11,7 +11,7 @@ public class Block
         SandStone
     }
 
-    public Block(BlockType type, bool isSlope = false, float traversalCost = 1f)
+    public Block(BlockType type, bool isSlope = false, int traversalCost = 1)
     {
         Type = type;
         IsSlope = isSlope;

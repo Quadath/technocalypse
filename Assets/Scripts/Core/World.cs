@@ -33,7 +33,7 @@ public class World
             {
                 for (int y = 0; y < SizeInChunksY; y++)
                 {
-                    chunks[x, y, z] = new Chunk(x, y, z, ChunkSizeX, ChunkSizeY, ChunkSizeZ);
+                    chunks[x, y, z] = new Chunk(x, y, z, ChunkSizeX, ChunkSizeY, ChunkSizeZ, this);
                 }
             }
         }
@@ -45,8 +45,23 @@ public class World
         return chunks[x, y, z];
     }
 
-    public void SetBlock(int x, int y, int z , Block block) {
-        if (x < 0 || x >= Width || y < 0 || y >= Height || z < 0 || z >= Depth) 
+    public Block GetBlock(int x, int y, int z)
+    {
+        if (x < 0 || x >= Width || y < 0 || y >= Height || z < 0 || z >= Depth)
+            return null;
+        int cx = x % ChunkSizeX;
+        int cy = y % ChunkSizeY;
+        int cz = z % ChunkSizeZ;
+        int chunk_x = (x - cx) / ChunkSizeX;
+        int chunk_y = (y - cy) / ChunkSizeY;
+        int chunk_z = (z - cz) / ChunkSizeZ;
+
+        return chunks[chunk_x, chunk_y, chunk_z].GetBlock(cx, cy, cz);
+    }
+
+    public void SetBlock(int x, int y, int z, Block block)
+    {
+        if (x < 0 || x >= Width || y < 0 || y >= Height || z < 0 || z >= Depth)
             return;
         int cx = x % ChunkSizeX;
         int cy = y % ChunkSizeY;

@@ -11,9 +11,10 @@ public class Chunk
     public int Depth { get; private set; }
     private ChunkRenderer renderer;
 
+    private World world;
     private Block[,,] blocks;
 
-    public Chunk(int x, int y, int z, int width, int height, int depth) {
+    public Chunk(int x, int y, int z, int width, int height, int depth, World w) {
         X = x;
         Y = y;
         Z = z;
@@ -21,6 +22,7 @@ public class Chunk
         Height = height;
         Depth = depth;
         blocks = new Block[Width, Height, Depth];
+        world = w;
     }
 
     public void SetBlock(int x, int y, int z , Block block) {
@@ -29,9 +31,17 @@ public class Chunk
         blocks[x, y, z] = block;
     }
 
-    public void UpdateMesh() {
+    public Block GetBlock(int x, int y, int z)
+    {
+        if (x < 0 || x >= Width || y < 0 || y >= Height || z < 0 || z >= Depth)
+            return null;
+        return blocks[x, y, z];
+    }
+
+    public void UpdateMesh()
+    {
         Debug.Log("Updating chunk " + X + " " + Y + " " + Z);
-        renderer.Render(blocks);
+        renderer.Render(world, new Vector3Int(X, Y, Z));
     }
 
     public void SetRenderer(ChunkRenderer r) {

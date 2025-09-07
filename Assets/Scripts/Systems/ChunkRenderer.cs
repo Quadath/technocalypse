@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ChunkRenderer : MonoBehaviour
+public class ChunkRenderer : MonoBehaviour, IChunkRenderer
 {
     private int width;
     private int height;
@@ -16,13 +16,6 @@ public class ChunkRenderer : MonoBehaviour
     MeshFilter mf;
     MeshRenderer mr;
     MeshCollider mc;
-
-    void AddAllComponents()
-    {
-        mf = gameObject.AddComponent<MeshFilter>();
-        mr = gameObject.AddComponent<MeshRenderer>();
-        mc = gameObject.AddComponent<MeshCollider>();
-    }
 
     public void Render(World world, Vector3Int chunkNumber)
     {
@@ -74,7 +67,9 @@ public class ChunkRenderer : MonoBehaviour
 
         if (mf == null)
         {
-            AddAllComponents();
+            mf = gameObject.GetComponent<MeshFilter>();
+            mr = gameObject.GetComponent<MeshRenderer>();
+            mc = gameObject.GetComponent<MeshCollider>();
         }
 
         mf.sharedMesh = _mesh;

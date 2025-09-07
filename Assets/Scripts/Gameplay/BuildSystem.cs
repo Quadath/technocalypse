@@ -44,7 +44,7 @@ public class BuildSystem : MonoBehaviour
             Debug.Log(hitInfo.point);
             
             // центр блоку
-            Vector3 snappedPos = placePos + Vector3.one * (gridSize / 2f);
+            Vector3 snappedPos = placePos;
 
             previewObject.transform.position = snappedPos;
             previewObject.transform.rotation = Quaternion.identity;

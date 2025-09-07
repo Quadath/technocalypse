@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Chunk
 {
+    private IChunkRenderer renderer;
     public int X { get; private set; }
     public int Y { get; private set; }
     public int Z { get; private set; }
@@ -9,8 +10,6 @@ public class Chunk
     public int Width { get; private set; }
     public int Height { get; private set; }
     public int Depth { get; private set; }
-    private ChunkRenderer renderer;
-
     private World world;
     private Block[,,] blocks;
 
@@ -44,7 +43,7 @@ public class Chunk
         renderer.Render(world, new Vector3Int(X, Y, Z));
     }
 
-    public void SetRenderer(ChunkRenderer r) {
+    public void SetRenderer(IChunkRenderer r) {
         renderer = r;
     }
 }

@@ -8,6 +8,8 @@ public class WorldManager : MonoBehaviour
     public int worldHeight = 64;
     public int worldDepth = 256;
 
+    public Material mat;
+
     void Awake() {
         world = new World(worldWidth, worldHeight, worldDepth);
         for (int x = 0; x < world.SizeInChunksX; x++)
@@ -24,7 +26,12 @@ public class WorldManager : MonoBehaviour
                         z * world.ChunkSizeZ);
 
                     // Додаємо рендерер
+                    // chunkGO.material = mat;
+                    chunkGO.AddComponent<MeshFilter>();
+                    MeshRenderer r = chunkGO.AddComponent<MeshRenderer>();
+                    chunkGO.AddComponent<MeshCollider>();
                     ChunkRenderer renderer = chunkGO.AddComponent<ChunkRenderer>();
+                    r.material = mat;
 
                     // Беремо відповідний chunk з world
                     Chunk chunk = world.GetChunk(x, y, z);

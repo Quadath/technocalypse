@@ -3,27 +3,21 @@ public class UnitController
 {
     private Unit unit;
     private Vector3? target;
+    public UnitView unitView;
 
     public UnitController(Unit unit)
     {
         this.unit = unit;
     }
 
-    public void SetTarget(Vector3 position)
+    public PathfindingGrid grid;
+
+    public void MoveTo(Vector3Int goal)
     {
-        target = position;
-    }
+        var start = Vector3Int.RoundToInt(unitView.transform.position);
+        var finder = new AStar3D();
+        var gridPath = finder.FindPath(start, goal, pos => grid.IsWalkable(pos));
 
-    public void Update()
-    {
-        if (target == null) return;
-
-        Vector3 dir = (target.Value - unit.Transform.position).normalized;
-        Vector3 newPos = unit.Transform.position + dir * unit.Speed * Time.deltaTime;
-
-        unit.Rigidbody.MovePosition(newPos);
-
-        if (Vector3.Distance(unit.Transform.position, target.Value) < 0.2f)
-            target = null; // досягли
+        unitView.SetPath(gridPath, grid);
     }
 }

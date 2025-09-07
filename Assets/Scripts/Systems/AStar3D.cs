@@ -7,11 +7,21 @@ public class AStar3D
     // 26 neighbor offsets (включає осьові, 2D- та 3D-діагоналі)
     private static readonly Vector3Int[] Neighbors = new Vector3Int[]
     {
+        //Forward, left, right, back
         new Vector3Int(1, 0, 0),
         new Vector3Int(-1, 0, 0),
         new Vector3Int(0, 0, 1),
-        new Vector3Int(0, 0, -1)
-
+        new Vector3Int(0, 0, -1),
+        //Diag Y0
+        new Vector3Int(1, 0, 1),
+        new Vector3Int(-1, 0, 1),
+        new Vector3Int(1, 0, -1),
+        new Vector3Int(-1, 0, -1),
+        //Y-1
+        new Vector3Int(1, -1, 0),
+        new Vector3Int(-1, -1, 0),
+        new Vector3Int(0, -1, 1),
+        new Vector3Int(0, -1, -1),
 
         // new Vector3Int(1,0,0), new Vector3Int(-1,0,0),
         // new Vector3Int(0,1,0), new Vector3Int(0,-1,0),

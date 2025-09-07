@@ -1,13 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BuildSystem : MonoBehaviour
+public class BuildSystem : MonoBehaviour, IBuildSystem
 {
     public Camera cam;
     public GameObject buildingPrefab;
-
     private GameObject previewObject;
+    private OrderSystem orderSystem;
 
+    public void Init(OrderSystem sys)
+    {
+        orderSystem = sys;
+    }
     void Start()
     {
         previewObject = Instantiate(buildingPrefab);
@@ -16,25 +20,26 @@ public class BuildSystem : MonoBehaviour
 
     void Update()
     {
-        Vector3 pos = FollowMouse();
+        if (!orderSystem.Active)
+            return;
+        FollowMouse();
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (pos != Vector3.zero)
-            {
-                mang.SetT(pos);
-            }
             PlaceBuilding();
         }
     }
     public UnitMovementManager mang;
-    Vector3 FollowMouse()
+    void FollowMouse()
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Ray ray = cam.ScreenPointToRay(mousePos);
-        if (Physics.Raycast(ray, out RaycastHit hitInfo))
+
+        int groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
+
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, groundLayerMask))
         {
-            return hitInfo.point;
+            // return hitInfo.point;
             float gridSize = 1f;
 
             // координати блоку, в який влучили
@@ -46,24 +51,18 @@ public class BuildSystem : MonoBehaviour
 
             // беремо сусідній блок у напрямку нормалі
             Vector3Int placePos = blockPos + Vector3Int.RoundToInt(hitInfo.normal);
-            Debug.Log(hitInfo.point);
 
             // центр блоку
             Vector3 snappedPos = placePos;
 
-            // previewObject.transform.position = snappedPos;
+            previewObject.transform.position = snappedPos;
             previewObject.transform.rotation = Quaternion.identity;
-
-        }
-        else
-        {
-            return Vector3.zero;
         }
     }
 
     void PlaceBuilding()
     {
-        // GameObject newObj = Instantiate(buildingPrefab, previewObject.transform.position, previewObject.transform.rotation);
-        // newObj.GetComponent<BoxCollider>().enabled = true;
+        GameObject newObj = Instantiate(buildingPrefab, previewObject.transform.position, previewObject.transform.rotation);
+        newObj.GetComponent<BoxCollider>().enabled = true;
     }
 }

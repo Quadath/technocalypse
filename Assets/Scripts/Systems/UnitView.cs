@@ -29,7 +29,7 @@ public class UnitView : MonoBehaviour
         {
             DrawCube(target, 1f, new Color(0, 1f, 0, 0.5f));
             Quaternion targetRot = Quaternion.LookRotation(dir.normalized);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 3 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 5 * Time.deltaTime);
         }
     }
 

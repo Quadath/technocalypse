@@ -28,6 +28,7 @@ public class WorldManager : MonoBehaviour
                     // Додаємо рендерер
                     // chunkGO.material = mat;
                     chunkGO.AddComponent<MeshFilter>();
+                    chunkGO.layer = 6;
                     MeshRenderer r = chunkGO.AddComponent<MeshRenderer>();
                     chunkGO.AddComponent<MeshCollider>();
                     ChunkRenderer renderer = chunkGO.AddComponent<ChunkRenderer>();

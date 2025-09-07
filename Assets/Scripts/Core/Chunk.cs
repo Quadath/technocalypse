@@ -39,7 +39,7 @@ public class Chunk
 
     public void UpdateMesh()
     {
-        // Debug.Log("Updating chunk " + X + " " + Y + " " + Z);
+        // Debug.Log("Updating chunk " + X + " " + Y + " " + Z);F
         renderer.Render(world, new Vector3Int(X, Y, Z));
     }
 

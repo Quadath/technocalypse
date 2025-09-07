@@ -13,7 +13,7 @@ public class UnitMovementManager : MonoBehaviour
             GameObject go = Instantiate(UnitPrefab, new Vector3(i * 2 + 20, 20, i * 2 + 20), Quaternion.identity);
             Rigidbody rb = go.GetComponent<Rigidbody>();
 
-            Unit unit = new Unit("Tank T1 " + i, go.transform, rb, 5);
+            Unit unit = new Unit("Tank T1 " + i, go.transform, rb, 10);
             UnitController controller = new UnitController(unit);
             UnitView view = go.GetComponent<UnitView>();
             view.Unit = unit;

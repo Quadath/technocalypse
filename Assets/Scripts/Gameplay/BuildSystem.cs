@@ -1,12 +1,17 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class BuildSystem : MonoBehaviour, IBuildSystem
 {
-    public Camera cam;
-    public GameObject buildingPrefab;
-    private GameObject previewObject;
+    [SerializeField] private BuildingData buildingData;
     private OrderSystem orderSystem;
+    [SerializeField] private WorldManager worldManager;
+    private BuildingGrid grid;
+    public Camera cam;
+    private GameObject previewObject;
+    private float gridSize = 1f;
+    private Vector3Int placePos;
 
     public void Init(OrderSystem sys)
     {
@@ -14,18 +19,27 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     }
     void Start()
     {
-        previewObject = Instantiate(buildingPrefab);
-        previewObject.GetComponent<Collider>().enabled = false;
+        grid = worldManager.BuildingGrid;
     }
 
     void Update()
     {
         if (!orderSystem.Active)
             return;
-        FollowMouse();
+
+        if (previewObject != null)
+        {
+            FollowMouse();
+        }
+        else
+        {
+            previewObject = Instantiate(buildingData.prefab);
+        }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
             PlaceBuilding();
         }
     }
@@ -40,7 +54,6 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, groundLayerMask))
         {
             // return hitInfo.point;
-            float gridSize = 1f;
 
             // координати блоку, в який влучили
             Vector3Int blockPos = new Vector3Int(
@@ -49,20 +62,24 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
                 Mathf.FloorToInt(hitInfo.point.z - (hitInfo.normal.z / 2) / gridSize)
             );
 
-            // беремо сусідній блок у напрямку нормалі
-            Vector3Int placePos = blockPos + Vector3Int.RoundToInt(hitInfo.normal);
+            placePos = blockPos + Vector3Int.RoundToInt(hitInfo.normal);
+            Building b = new Building(buildingData.Name, buildingData.Size, 1, buildingData.HitPoints);
+            if (grid.CanPlaceBuilding(b, placePos.x, placePos.y, placePos.z))
+            {
+                DebugDraw.DrawCube(placePos + Vector3.one * 0.5f, 1, new Color(1, 0, 0));
 
-            // центр блоку
-            Vector3 snappedPos = placePos;
+                previewObject.transform.position = Vector3.Slerp(previewObject.transform.position, placePos, 5 * Time.deltaTime);
+                previewObject.transform.rotation = Quaternion.identity;
+            }
 
-            previewObject.transform.position = snappedPos;
-            previewObject.transform.rotation = Quaternion.identity;
         }
     }
 
     void PlaceBuilding()
     {
-        GameObject newObj = Instantiate(buildingPrefab, previewObject.transform.position, previewObject.transform.rotation);
+        Building b = new Building(buildingData.Name, buildingData.Size, 1, buildingData.HitPoints);
+        grid.PlaceBuilding(b, placePos.x, placePos.y, placePos.z);
+        GameObject newObj = Instantiate(buildingData.prefab, placePos, previewObject.transform.rotation);
         newObj.GetComponent<BoxCollider>().enabled = true;
     }
 }

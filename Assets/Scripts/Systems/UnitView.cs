@@ -27,7 +27,7 @@ public class UnitView : MonoBehaviour
 
         if (dir.sqrMagnitude > 0.001f)
         {
-            DrawCube(target, 1f, new Color(0, 1f, 0, 0.5f));
+            DebugDraw.DrawCube(target, 1f, new Color(0, 1f, 0, 0.5f));
             Quaternion targetRot = Quaternion.LookRotation(dir.normalized);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 5 * Time.deltaTime);
         }
@@ -42,37 +42,5 @@ public class UnitView : MonoBehaviour
         {
             path.Enqueue(new Vector3(p.x + 0.5f, p.y, p.z + 0.5f));
         }
-    }
-
-    void DrawCube(Vector3 center, float size, Color color)
-    {
-        float half = size / 2f;
-        Vector3[] points = new Vector3[8];
-        points[0] = center + new Vector3(-half, -half, -half);
-        points[1] = center + new Vector3(half, -half, -half);
-        points[2] = center + new Vector3(half, -half, half);
-        points[3] = center + new Vector3(-half, -half, half);
-        points[4] = center + new Vector3(-half, half, -half);
-        points[5] = center + new Vector3(half, half, -half);
-        points[6] = center + new Vector3(half, half, half);
-        points[7] = center + new Vector3(-half, half, half);
-
-        // Bottom edges
-        Debug.DrawLine(points[0], points[1], color);
-        Debug.DrawLine(points[1], points[2], color);
-        Debug.DrawLine(points[2], points[3], color);
-        Debug.DrawLine(points[3], points[0], color);
-
-        // Top edges
-        Debug.DrawLine(points[4], points[5], color);
-        Debug.DrawLine(points[5], points[6], color);
-        Debug.DrawLine(points[6], points[7], color);
-        Debug.DrawLine(points[7], points[4], color);
-
-        // Vertical edges
-        Debug.DrawLine(points[0], points[4], color);
-        Debug.DrawLine(points[1], points[5], color);
-        Debug.DrawLine(points[2], points[6], color);
-        Debug.DrawLine(points[3], points[7], color);
     }
 }

@@ -30,11 +30,11 @@ public static class VoxelData
         new Vector3Int(0, -1, 0), // bottom
         new Vector3Int(0, 0, 1)   // front
     };
-
+    private static float texel = 1f / 64f;
     public static readonly Vector2[] UVs = new Vector2[4] {
-        new Vector2(0, 0),
-        new Vector2(1, 0),
-        new Vector2(0, 1),
-        new Vector2(1, 1)
+        new Vector2(0 + texel, 0.75f + texel),
+        new Vector2(0.25f - texel, 0.75f + texel),
+        new Vector2(0 + texel, 1 - texel),
+        new Vector2(0.25f - texel, 1 - texel)
     };
 }

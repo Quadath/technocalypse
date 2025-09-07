@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class UnitOrdersSystem : MonoBehaviour, IUnitOrdersSystem
 {
@@ -20,6 +21,8 @@ public class UnitOrdersSystem : MonoBehaviour, IUnitOrdersSystem
         if (!Mouse.current.leftButton.wasPressedThisFrame)
             return;
 
+        if (EventSystem.current.IsPointerOverGameObject())
+                return; // якщо натиснули на UI — не робимо Raycast
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Ray ray = cam.ScreenPointToRay(mousePos);
 

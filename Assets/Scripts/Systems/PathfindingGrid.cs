@@ -4,10 +4,12 @@ public class PathfindingGrid : MonoBehaviour
 {
     public WorldManager manager;
     private World world;
+    private BuildingGrid buildingGrid;
 
     void Start()
     {
         world = manager.world;
+        buildingGrid = manager.BuildingGrid;
     }
 
     public bool IsWalkable(Vector3Int pos)
@@ -24,10 +26,16 @@ public class PathfindingGrid : MonoBehaviour
             if (pos.y > 0)
             {
                 var below = world.GetBlock(pos.x, pos.y - 1, pos.z);
-                return below.Type != Block.BlockType.Air;
+                if (below.Type != Block.BlockType.Air)
+                {
+                    if (!buildingGrid.IsCellOccupied(pos.x, pos.y, pos.z))
+                        return true;
+                }
             }
             return false;
         }
+        
+
         return false;
     }
 }

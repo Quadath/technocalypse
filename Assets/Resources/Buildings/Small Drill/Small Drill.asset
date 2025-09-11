@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 095ae23109bed436292a2b088c6b8e58, type: 3}
+  m_Name: Small Drill
+  m_EditorClassIdentifier: ScriptableObjects::BuildingData
+  Name: Small Drill
+  Size: {x: 2, y: 2, z: 2}
+  HitPoints: 125
+  prefab: {fileID: 5777252193406706553, guid: 4916658dc6171473aa2935e7aab4daba, type: 3}
+  behaviours:
+  - {fileID: 11400000, guid: 14170f7225e19471a917ed8cace1e734, type: 2}

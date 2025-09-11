@@ -5,14 +5,16 @@ using UnityEngine.EventSystems;
 public class BuildSystem : MonoBehaviour, IBuildSystem
 {
     [SerializeField] private BuildingData buildingData;
-    private OrderSystem orderSystem;
     [SerializeField] private WorldManager worldManager;
-    private BuildingGrid grid;
-    public Camera cam;
-    private GameObject previewObject;
-    private float gridSize = 1f;
-    private Vector3Int placePos;
 
+    private BuildingGrid grid;
+    private IServiceProvider services;
+    private OrderSystem orderSystem;
+    private float gridSize = 1f;
+    private GameObject previewObject;
+    public Camera cam;
+    public BuildingData selectedBuilding;
+    private Vector3Int placePos;
     public void Init(OrderSystem sys)
     {
         orderSystem = sys;
@@ -20,6 +22,11 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     void Start()
     {
         grid = worldManager.BuildingGrid;
+    }
+
+    public void SetServices(IServiceProvider services)
+    {
+        this.services = services;
     }
 
     void Update()
@@ -78,8 +85,15 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     void PlaceBuilding()
     {
         Building b = new Building(buildingData.Name, buildingData.Size, 1, buildingData.HitPoints);
+        foreach (var behaviourData in selectedBuilding.behaviours) {
+            var behaviour = behaviourData.CreateBehaviour(b, services);
+            b.AddBehaviour(behaviour);
+        }
+        
         grid.PlaceBuilding(b, placePos.x, placePos.y, placePos.z);
         GameObject newObj = Instantiate(buildingData.prefab, placePos, previewObject.transform.rotation);
+        BuildingView view = newObj.AddComponent<BuildingView>();
+        view.Init(b);
         newObj.GetComponent<BoxCollider>().enabled = true;
     }
 }

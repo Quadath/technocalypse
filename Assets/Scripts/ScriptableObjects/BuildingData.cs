@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "NewBuildingData", menuName = "Buildings/Building")]
 public class BuildingData : ScriptableObject
@@ -7,4 +8,6 @@ public class BuildingData : ScriptableObject
     public Vector3Int Size;
     public int HitPoints;
     public GameObject prefab;
+    
+    public List<BuildingBehaviourData> behaviours;
 }

@@ -29,10 +29,7 @@ public class OrderSystemsManager : MonoBehaviour
     }
 }
 
-public interface IBuildSystem
-{
-    void Init(OrderSystem sys);
-}
+
 
 public interface IUnitOrdersSystem {
     void Init(OrderSystem sys);

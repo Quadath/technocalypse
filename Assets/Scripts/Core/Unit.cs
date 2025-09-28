@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Unit : ITargetable
 {
@@ -11,15 +12,49 @@ public class Unit : ITargetable
     public int MaxHitPoints;
     public bool IsAlive => HitPoints > 0;
     public float AttackRange;
-    public Unit Target = null;
+    public ITargetable Target = null;
+    public Vector3 NextPathPointPosition;
+    public Vector3 TargetDirection;
     public Vector3 GoalPosition;
     public bool HasGoal => GoalPosition != Vector3.zero;
-    public Unit(string name, Transform transform, Rigidbody rigidbody, float speed)
+    public PathfindingGrid PathfindingGrid;
+    private readonly List<IUnitBehaviour> behaviours = new();
+    
+    public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed)
     {
         Name = name;
+        Player = player;
         Transform = transform;
         Rigidbody = rigidbody;
         Speed = speed;
+    }
+
+    public void Tick(float deltaTime)
+    {
+        foreach (var b in behaviours)
+            b.OnTick(deltaTime);
+    }
+    // public void SetMovePath(IEnumerable<Vector3> worldPath)
+    // {
+    //     var mb = GetBehaviour<MoveBehaviour>();
+    //     if (mb != null) mb.SetPath(worldPath);
+    // }
+    public void MoveTo(Vector3Int g)
+    {
+        var mb = GetBehaviour<MoveBehaviour>();
+        var start = Vector3Int.RoundToInt(Transform.position);
+        var finder = new AStar3D();
+        var gridPath = finder.FindPath(start, g, pos => PathfindingGrid.IsWalkable(pos));
+        if (mb != null) mb.SetPath(gridPath);
+    }
+
+    public void AddBehaviour(IUnitBehaviour b) => behaviours.Add(b);
+    
+    public T GetBehaviour<T>() where T : class, IUnitBehaviour
+    {
+        foreach (var b in behaviours)
+            if (b is T t) return t;
+        return null;
     }
 
     public void TakeDamage(int amount)

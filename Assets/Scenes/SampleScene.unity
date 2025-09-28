@@ -134,6 +134,8 @@ GameObject:
   - component: {fileID: 200698474}
   - component: {fileID: 200698478}
   - component: {fileID: 200698476}
+  - component: {fileID: 200698479}
+  - component: {fileID: 200698480}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -157,7 +159,6 @@ MonoBehaviour:
   worldManager: {fileID: 2030338558}
   cam: {fileID: 330585545}
   selectedBuilding: {fileID: 11400000, guid: 4c4a94724d47a421a8bb4dd6425a1670, type: 2}
-  mang: {fileID: 2077063734}
 --- !u!4 &200698473
 Transform:
   m_ObjectHideFlags: 0
@@ -201,7 +202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a50f3f686607040e9a7a66d63271deeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Gameplay::UnitOrdersSystem
-  manager: {fileID: 2077063734}
   cam: {fileID: 330585545}
 --- !u!114 &200698476
 MonoBehaviour:
@@ -239,7 +239,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9966e0506b4eb4ca8bba7627e78780ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::ResourceManager
-  text: {fileID: 0}
+  text: {fileID: 833059389}
+--- !u!114 &200698479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200698471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7523794dd96644519b959e3fe252d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::UnitManager
+--- !u!114 &200698480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200698471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3815629b2ee473ab31455b5f74faf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::UnitSpawner
+  manager: {fileID: 2030338558}
+  unitData: {fileID: 11400000, guid: 925da7a286bb041e18b06c598052fe83, type: 2}
 --- !u!1 &257479745
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,8 +717,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 45}
-  m_SizeDelta: {x: 100, y: 30}
+  m_AnchoredPosition: {x: 75, y: 135}
+  m_SizeDelta: {x: 150, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &735231841
 MonoBehaviour:
@@ -1238,8 +1264,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 15}
-  m_SizeDelta: {x: 100, y: 30}
+  m_AnchoredPosition: {x: 75, y: 45}
+  m_SizeDelta: {x: 150, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257439671
 MonoBehaviour:
@@ -1323,51 +1349,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257439669}
   m_CullTransparentMesh: 1
---- !u!1 &1459974370
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1459974372}
-  - component: {fileID: 1459974371}
-  m_Layer: 0
-  m_Name: PathfindingGrid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1459974371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1459974370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f613315ee79949fe9a2c8873a693bfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Systems::PathfindingGrid
-  manager: {fileID: 2030338558}
---- !u!4 &1459974372
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1459974370}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1515183137
 GameObject:
   m_ObjectHideFlags: 0
@@ -1524,8 +1505,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab605166d0c23455c996c88f3e0e3479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::UnitMovementManager
-  grid: {fileID: 1459974371}
-  UnitPrefab: {fileID: 382474950152685406, guid: 93e96108f1b044849b1b288a724c1199, type: 3}
 --- !u!4 &2077063735
 Transform:
   m_ObjectHideFlags: 0
@@ -1573,10 +1552,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 737675741}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 250, y: 0}
+  m_SizeDelta: {x: 200, y: 360}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2102235269
 MonoBehaviour:
@@ -1626,6 +1605,5 @@ SceneRoots:
   - {fileID: 200698473}
   - {fileID: 2030338557}
   - {fileID: 2077063735}
-  - {fileID: 1459974372}
   - {fileID: 737675741}
   - {fileID: 1515183140}

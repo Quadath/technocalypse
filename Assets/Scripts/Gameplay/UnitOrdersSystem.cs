@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 public class UnitOrdersSystem : MonoBehaviour, IUnitOrdersSystem
 {
     private OrderSystem orderSystem;
-    [SerializeField] private UnitMovementManager manager;
+    //[SerializeField] private UnitMovementManager manager;
     [SerializeField] private Camera cam;
     public void Init(OrderSystem sys)
     {
@@ -29,7 +29,11 @@ public class UnitOrdersSystem : MonoBehaviour, IUnitOrdersSystem
         int groundLayerMask = 1 << LayerMask.NameToLayer("Ground");
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, groundLayerMask))
         {
-            manager.SetT(hitInfo.point);
+            UnitManager.Instance.MoveCommand(new Vector3Int(
+                Mathf.FloorToInt(hitInfo.point.x),
+                Mathf.FloorToInt(hitInfo.point.y),
+                Mathf.FloorToInt(hitInfo.point.z)
+            ));
         }
     }
 }

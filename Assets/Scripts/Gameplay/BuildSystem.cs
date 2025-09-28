@@ -50,7 +50,6 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
             PlaceBuilding();
         }
     }
-    public UnitMovementManager mang;
     void FollowMouse()
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();

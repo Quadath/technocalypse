@@ -1,17 +1,15 @@
 using UnityEngine;
 
-public class PathfindingGrid : MonoBehaviour
+public class PathfindingGrid
 {
-    public WorldManager manager;
     private World world;
     private BuildingGrid buildingGrid;
 
-    void Start()
+    public PathfindingGrid(World world, BuildingGrid buidlingGrid)
     {
-        world = manager.world;
-        buildingGrid = manager.BuildingGrid;
+        this.world = world;
+        this.buildingGrid = buidlingGrid;
     }
-
     public bool IsWalkable(Vector3Int pos)
     {
         if (pos.x < 0 || pos.y < 0 || pos.z < 0 ||

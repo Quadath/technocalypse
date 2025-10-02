@@ -266,8 +266,12 @@ MonoBehaviour:
   manager: {fileID: 2030338558}
   units:
   - unitData: {fileID: 11400000, guid: 925da7a286bb041e18b06c598052fe83, type: 2}
-    player: 1
+    player: 0
     position: {x: 14, y: 19, z: 6}
+    rotation: {x: 0.008726535, y: 0, z: 0, w: 0.9999619}
+  - unitData: {fileID: 11400000, guid: 925da7a286bb041e18b06c598052fe83, type: 2}
+    player: 1
+    position: {x: 65, y: 13, z: 4}
     rotation: {x: 0.008726535, y: 0, z: 0, w: 0.9999619}
 --- !u!1 &257479745
 GameObject:

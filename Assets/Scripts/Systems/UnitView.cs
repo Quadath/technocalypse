@@ -5,15 +5,20 @@ public class UnitView : MonoBehaviour
 {
     public Unit UnitCore { get; set; }
     private Rigidbody rb;
-    [SerializeField] private float rotationLerp = 0.01f;
+    [SerializeField] private float rotationLerp = 3f;
 
     void Awake() => rb = GetComponent<Rigidbody>();
 
     public void Bind(Unit unit)
     {
         UnitCore = unit;
+		UnitCore.OnMessage += OnDebugMessage;
     }
-
+	
+	private void OnDestroy()
+ 	{
+		UnitCore.OnMessage -= OnDebugMessage;
+	}
     private void FixedUpdate()
     {
         DebugDraw.DrawCube(UnitCore.NextPathPointPosition, 1, new Color(1, 1, 0, 0.5f));
@@ -36,4 +41,8 @@ public class UnitView : MonoBehaviour
     {
         // тут можна Instantiate(projectilePrefab) або LineRenderer, particle, etc.
     }
+
+	public void OnDebugMessage(string msg) {
+		Debug.Log(msg);
+	}
 }

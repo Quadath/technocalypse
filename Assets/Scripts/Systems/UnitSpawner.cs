@@ -9,7 +9,6 @@ public class UnitSpawner : MonoBehaviour
 
     void Start()
     {
-        //SpawnAt(new Vector3(10, 17, 5));
 		foreach (var u in units)
         {
 			SpawnAt(u.Position, u.Rotation, u.unitData, u.player);
@@ -18,23 +17,23 @@ public class UnitSpawner : MonoBehaviour
 
     public void SpawnAt(Vector3 worldPos, Quaternion rot, UnitData unitData, int player)
     {
-		GameObject go = Instantiate(unitData.prefab, worldPos, Quaternion.identity);
+		GameObject go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
 		go.GetComponent<TeamPainter>().Repaint(player);
         Rigidbody rb = go.GetComponent<Rigidbody>();
-        Unit unitCore = new Unit(unitData.name, player, go.transform, rb, unitData.speed);
+        Unit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed);
         unitCore.PathfindingGrid = manager.PathfindingGrid;
 
         // 1) створюємо core
         //var move = new MoveBehaviour(unitCore);
         //unitCore.AddBehaviour(move);
- 		foreach (var behaviourType in unitData.behaviours)
-        	UnitBehaviourFactory.AddBehaviour(unitCore, behaviourType);
+ 		foreach (var behaviour in unitData.Behaviours)`
+        	unitCore.AddBehaviour(behaviour.CreateBehaviour(unitCore));
 
         // 2) реєструємо в менеджері
         UnitManager.Instance.Register(unitCore);
 
         // 3) створюємо view і біндимо
-        var view = go.GetComponent<UnitView>();
+        var view = go.AddComponent<UnitView>();
         view.Bind(unitCore);
     }
 }

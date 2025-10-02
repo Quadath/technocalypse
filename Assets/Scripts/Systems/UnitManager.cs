@@ -15,11 +15,11 @@ public class UnitManager : MonoBehaviour
 
     public void MoveCommand(Vector3Int pos)
     {
+        Debug.Log(pos);
         foreach (var unit in units)
         {
-            Debug.Log(pos);
-			for (int i = 0; i < units.Count; i++)
-            	units[i].MoveTo(pos);
+			if(unit.Player != 0) continue;
+            unit.MoveTo(pos);
         }
     }
 

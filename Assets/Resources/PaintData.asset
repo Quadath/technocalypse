@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a30721b52154e9f97537cb2a3d017d, type: 3}
+  m_Name: PaintData
+  m_EditorClassIdentifier: ScriptableObjects::PaintData
+  playerColors:
+  - {fileID: 2100000, guid: fefc34345b153473e802096309280d41, type: 2}
+  - {fileID: 2100000, guid: 793c694119dfe4df0be84b23a037d773, type: 2}

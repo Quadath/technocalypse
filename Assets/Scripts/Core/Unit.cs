@@ -4,14 +4,13 @@ using System.Collections.Generic;
 public class Unit : ITargetable
 {
     public string Name { get; }
-    public Transform Transform { get; }    // посилання на GameObject
-    public Rigidbody Rigidbody { get; }    // для фізики
     public int Player;
     public float Speed { get; }
     public int HitPoints;
     public int MaxHitPoints;
-    public bool IsAlive => HitPoints > 0;
-    public float AttackRange;
+	public int DetectionRange = 12;
+    public Transform Transform { get; }    // посилання на GameObject
+    public Rigidbody Rigidbody { get; }    // для фізики
     public ITargetable Target = null;
     public Vector3 NextPathPointPosition;
     public Vector3 TargetDirection;
@@ -19,6 +18,9 @@ public class Unit : ITargetable
     public bool HasGoal => GoalPosition != Vector3.zero;
     public PathfindingGrid PathfindingGrid;
     private readonly List<IUnitBehaviour> behaviours = new();
+    public bool IsAlive => HitPoints > 0;
+	public string Message { get; private set; }
+	public event System.Action<string> OnMessage;
     
     public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed)
     {
@@ -61,4 +63,9 @@ public class Unit : ITargetable
     {
         HitPoints -= amount;
     }
+
+	public void DebugMessage(string msg) {
+		Message = msg;
+		OnMessage?.Invoke(Message);
+	}
 }

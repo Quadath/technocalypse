@@ -61,6 +61,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         else
         {
             previewObject = Instantiate(selectedBuilding.prefab, placePos, Quaternion.identity);
+            previewObject.GetComponent<TeamPainter>().Repaint(0);
         }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -111,6 +112,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         
         grid.PlaceBuilding(b, placePos.x, placePos.y, placePos.z);
         GameObject newObj = Instantiate(selectedBuilding.prefab, placePos, previewObject.transform.rotation);
+        newObj.GetComponent<TeamPainter>().Repaint(0);
         BuildingView view = newObj.AddComponent<BuildingView>();
         view.Init(b);
         newObj.GetComponent<BoxCollider>().enabled = true;

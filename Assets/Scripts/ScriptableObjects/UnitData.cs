@@ -1,12 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [CreateAssetMenu(fileName = "UnitData", menuName = "Scriptable Objects/UnitData")]
 public class UnitData : ScriptableObject
 {
-    public string name;
-	public GameObject prefab;
-	public float speed;
-	public int hitPoints;
-	public List<UnitBehaviourType> behaviours;
+    public string UnitName;
+	public GameObject Prefab;
+	public float Speed;
+	public int HitPoints;
+	[SerializeField] private List<ScriptableObject> behaviours; 
+
+  	public IEnumerable<IUnitBehaviourData> Behaviours =>
+    	behaviours.OfType<IUnitBehaviourData>();
 }

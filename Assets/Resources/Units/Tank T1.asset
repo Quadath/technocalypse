@@ -16,3 +16,4 @@ MonoBehaviour:
   prefab: {fileID: 382474950152685406, guid: 93e96108f1b044849b1b288a724c1199, type: 3}
   speed: 3
   hitPoints: 75
+  behaviours: 00000000

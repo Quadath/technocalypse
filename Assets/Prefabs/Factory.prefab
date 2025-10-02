@@ -155,7 +155,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fefc34345b153473e802096309280d41, type: 2}
+  - {fileID: 2100000, guid: 3e3a51ff14b17410e8f3bb4f50d819ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -187,6 +187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2134565381750320012}
+  - component: {fileID: 4236839233010188638}
   - component: {fileID: 2920105011496401524}
   m_Layer: 0
   m_Name: Factory
@@ -213,6 +214,21 @@ Transform:
   - {fileID: 1117552876607151344}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4236839233010188638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7634420477961848288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e43a2199ef53d4254b3adea3be6d10ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::TeamPainter
+  renderers:
+  - {fileID: 7456097682793404930}
+  data: {fileID: 11400000, guid: d2190372d60af4e5b9efbc4cb3b221f4, type: 2}
 --- !u!65 &2920105011496401524
 BoxCollider:
   m_ObjectHideFlags: 0

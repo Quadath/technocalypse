@@ -4,9 +4,7 @@ using UnityEngine.EventSystems;
 
 public class BuildSystem : MonoBehaviour, IBuildSystem
 {
-    [SerializeField] private BuildingData buildingData;
     [SerializeField] private WorldManager worldManager;
-
     private BuildingGrid grid;
     private IServiceProvider services;
     private OrderSystem orderSystem;
@@ -18,20 +16,42 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     public void Init(OrderSystem sys)
     {
         orderSystem = sys;
+        orderSystem.OnStateChanged += HandleStateChange;
     }
+    
     void Start()
     {
         grid = worldManager.BuildingGrid;
     }
 
+    private void HandleStateChange(bool active)
+    {
+        if (active)
+        { 
+            
+        }
+        else
+        {
+            Destroy(previewObject);
+        }
+        // Debug.Log($"BuildSystem is now {(active ? "Active" : "Inactive")}");
+    }
+    
     public void SetServices(IServiceProvider services)
     {
         this.services = services;
     }
 
+    public void SelectBuilding(BuildingData data)
+    {
+        selectedBuilding = data;
+        Debug.Log("Selected: " + selectedBuilding.name);
+        Destroy(previewObject);
+    }
+
     void Update()
     {
-        if (!orderSystem.Active)
+        if (!orderSystem.IsActive)
             return;
 
         if (previewObject != null)
@@ -40,7 +60,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         }
         else
         {
-            previewObject = Instantiate(buildingData.prefab);
+            previewObject = Instantiate(selectedBuilding.prefab, placePos, Quaternion.identity);
         }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -69,7 +89,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
             );
 
             placePos = blockPos + Vector3Int.RoundToInt(hitInfo.normal);
-            Building b = new Building(buildingData.Name, buildingData.Size, 1, buildingData.HitPoints);
+            Building b = new Building(selectedBuilding.Name, selectedBuilding.Size, 1, selectedBuilding.HitPoints);
             if (grid.CanPlaceBuilding(b, placePos.x, placePos.y, placePos.z))
             {
                 DebugDraw.DrawCube(placePos + Vector3.one * 0.5f, 1, new Color(1, 0, 0));
@@ -83,14 +103,14 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
 
     void PlaceBuilding()
     {
-        Building b = new Building(buildingData.Name, buildingData.Size, 1, buildingData.HitPoints);
+        Building b = new Building(selectedBuilding.Name, selectedBuilding.Size, 1, selectedBuilding.HitPoints);
         foreach (var behaviourData in selectedBuilding.behaviours) {
             var behaviour = behaviourData.CreateBehaviour(b, services);
             b.AddBehaviour(behaviour);
         }
         
         grid.PlaceBuilding(b, placePos.x, placePos.y, placePos.z);
-        GameObject newObj = Instantiate(buildingData.prefab, placePos, previewObject.transform.rotation);
+        GameObject newObj = Instantiate(selectedBuilding.prefab, placePos, previewObject.transform.rotation);
         BuildingView view = newObj.AddComponent<BuildingView>();
         view.Init(b);
         newObj.GetComponent<BoxCollider>().enabled = true;

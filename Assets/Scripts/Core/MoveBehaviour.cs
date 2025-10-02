@@ -30,8 +30,8 @@ public class MoveBehaviour : IUnitBehaviour
         Vector3 target = path.Peek();
         unit.NextPathPointPosition = target;
         Vector3 dir = target - unit.Transform.position;
-        unit.TargetDirection = dir.normalized;
         dir.y = 0f; // 2D plane movement
+        unit.TargetDirection = dir.normalized;
 
         if (dir.sqrMagnitude < 0.1f) // close enough
         {

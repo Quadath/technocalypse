@@ -14,7 +14,7 @@ public class UnitOrdersSystem : MonoBehaviour, IUnitOrdersSystem
 
     void Update()
     {
-        if (!orderSystem.Active)
+        if (!orderSystem.IsActive)
             return;
         
 

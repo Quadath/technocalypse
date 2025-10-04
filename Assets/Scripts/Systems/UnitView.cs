@@ -42,7 +42,14 @@ public class UnitView : MonoBehaviour
         // тут можна Instantiate(projectilePrefab) або LineRenderer, particle, etc.
     }
 
-	public void OnDebugMessage(string msg) {
-		Debug.Log(msg);
+	public void OnDebugMessage(string msg)
+	{
+		DebugUtil.Log(gameObject, msg);
+	}
+	
+	void OnDrawGizmos()
+	{
+		UnityEditor.Handles.Label(transform.position + Vector3.up * 2f,
+			$"{name}\nID: {gameObject.GetInstanceID()}");
 	}
 }

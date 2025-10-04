@@ -8,10 +8,9 @@ public class Unit : ITargetable
     public float Speed { get; }
     public int HitPoints;
     public int MaxHitPoints;
-	public int DetectionRange = 12;
+	public int DetectionRange = 20;
     public Transform Transform { get; }    // посилання на GameObject
     public Rigidbody Rigidbody { get; }    // для фізики
-    public ITargetable Target = null;
     public Vector3 NextPathPointPosition;
     public Vector3 TargetDirection;
     public Vector3 GoalPosition;
@@ -22,13 +21,15 @@ public class Unit : ITargetable
 	public string Message { get; private set; }
 	public event System.Action<string> OnMessage;
     
-    public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed)
+    public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed, int hp)
     {
         Name = name;
         Player = player;
         Transform = transform;
         Rigidbody = rigidbody;
         Speed = speed;
+		HitPoints = hp;
+		MaxHitPoints = hp;
     }
 
     public void Tick(float deltaTime)
@@ -62,6 +63,7 @@ public class Unit : ITargetable
     public void TakeDamage(int amount)
     {
         HitPoints -= amount;
+		DebugMessage($"<color=cyan>[{"Unit"}]</color>: got damage. HP is {HitPoints}");
     }
 
 	public void DebugMessage(string msg) {

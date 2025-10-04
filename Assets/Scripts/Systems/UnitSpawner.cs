@@ -20,13 +20,13 @@ public class UnitSpawner : MonoBehaviour
 		GameObject go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
 		go.GetComponent<TeamPainter>().Repaint(player);
         Rigidbody rb = go.GetComponent<Rigidbody>();
-        Unit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed);
+        Unit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints);
         unitCore.PathfindingGrid = manager.PathfindingGrid;
 
         // 1) створюємо core
         //var move = new MoveBehaviour(unitCore);
         //unitCore.AddBehaviour(move);
- 		foreach (var behaviour in unitData.Behaviours)`
+        foreach (var behaviour in unitData.Behaviours) 
         	unitCore.AddBehaviour(behaviour.CreateBehaviour(unitCore));
 
         // 2) реєструємо в менеджері

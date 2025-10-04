@@ -17,4 +17,5 @@ MonoBehaviour:
   Speed: 3
   HitPoints: 90
   behaviours:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 0d2c6dae132934d15af2276f47b80702, type: 2}
+  - {fileID: 11400000, guid: 1ac07541dceee435ead431f19443a46a, type: 2}

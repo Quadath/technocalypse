@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UnitManager : MonoBehaviour
 {
@@ -21,16 +22,39 @@ public class UnitManager : MonoBehaviour
 			if(unit.Player != 0) continue;
             unit.MoveTo(pos);
         }
-    }
+    }	
+
+	public Unit GetClosestEnemy(Unit self, List<Unit> units, float radius)
+	{
+    	float radiusSqr = radius * radius;
+    	return units
+        	.Where(u => u != self 
+                    && u.Player != self.Player
+                    && (u.Transform.position - self.Transform.position).sqrMagnitude <= radiusSqr)
+        	.OrderBy(u => (u.Transform.position - self.Transform.position).sqrMagnitude)
+        	.FirstOrDefault();
+	}
+
 
     public void Register(Unit u) => units.Add(u);
     public void Unregister(Unit u) => units.Remove(u);
 
     // Викликаємо Tick у FixedUpdate — корисно для сумісності з фізикою
+
     private void FixedUpdate()
     {
         float dt = Time.fixedDeltaTime;
-        for (int i = 0; i < units.Count; i++)
+        for (int i = 0; i < units.Count; i++) {
+			AttackBehaviour attackBehaviour = units[i].GetBehaviour<AttackBehaviour>();
+			if(attackBehaviour != null) {
+				ITargetable enemy = GetClosestEnemy(units[i], units, units[i].DetectionRange);	
+				if(enemy != null) { 	
+					attackBehaviour.SetTarget(enemy);
+				}
+			}
+
+			
             units[i].Tick(dt);
+		}
     }
 }

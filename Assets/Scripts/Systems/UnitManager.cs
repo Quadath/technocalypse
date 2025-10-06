@@ -36,7 +36,12 @@ public class UnitManager : MonoBehaviour
 	}
 
 
-    public void Register(Unit u) => units.Add(u);
+    public void Register(Unit u)
+    {
+	    units.Add(u);
+	    u.AddOnDeathListener((Unit) => Unregister(u));
+    }
+
     public void Unregister(Unit u) => units.Remove(u);
 
     // Викликаємо Tick у FixedUpdate — корисно для сумісності з фізикою
@@ -52,8 +57,6 @@ public class UnitManager : MonoBehaviour
 					attackBehaviour.SetTarget(enemy);
 				}
 			}
-
-			
             units[i].Tick(dt);
 		}
     }

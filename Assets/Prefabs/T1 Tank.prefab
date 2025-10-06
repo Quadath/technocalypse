@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2866727656801275260}
   - component: {fileID: 4216898065672434992}
+  - component: {fileID: 3687827389845169119}
   - component: {fileID: 984756547051186260}
   - component: {fileID: 4111597796441963650}
   m_Layer: 0
@@ -53,6 +54,19 @@ MonoBehaviour:
   renderers:
   - {fileID: 6890151592052363127}
   data: {fileID: 11400000, guid: d2190372d60af4e5b9efbc4cb3b221f4, type: 2}
+--- !u!114 &3687827389845169119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 382474950152685406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee1f401aacd54f08bcd37c4da21cfb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::TurretView
+  Turret: {fileID: 7254976157437938665}
 --- !u!65 &984756547051186260
 BoxCollider:
   m_ObjectHideFlags: 0

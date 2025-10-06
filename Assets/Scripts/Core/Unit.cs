@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -19,7 +20,8 @@ public class Unit : ITargetable
     private readonly List<IUnitBehaviour> behaviours = new();
     public bool IsAlive => HitPoints > 0;
 	public string Message { get; private set; }
-	public event System.Action<string> OnMessage;
+	public event Action<string> OnMessage;
+    private event Action<Unit> OnDeath;
     
     public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed, int hp)
     {
@@ -37,11 +39,6 @@ public class Unit : ITargetable
         foreach (var b in behaviours)
             b.OnTick(deltaTime);
     }
-    // public void SetMovePath(IEnumerable<Vector3> worldPath)
-    // {
-    //     var mb = GetBehaviour<MoveBehaviour>();
-    //     if (mb != null) mb.SetPath(worldPath);
-    // }
     public void MoveTo(Vector3Int g)
     {
         var mb = GetBehaviour<MoveBehaviour>();
@@ -52,6 +49,7 @@ public class Unit : ITargetable
     }
 
     public void AddBehaviour(IUnitBehaviour b) => behaviours.Add(b);
+    public void AddOnDeathListener(Action<Unit> listener) => OnDeath += listener;
     
     public T GetBehaviour<T>() where T : class, IUnitBehaviour
     {
@@ -63,7 +61,17 @@ public class Unit : ITargetable
     public void TakeDamage(int amount)
     {
         HitPoints -= amount;
+        if (HitPoints <= 0)
+        {
+            Die();
+            return;
+        } 
 		DebugMessage($"<color=cyan>[{"Unit"}]</color>: got damage. HP is {HitPoints}");
+    }
+
+    private void Die()
+    {
+        OnDeath?.Invoke(this);
     }
 
 	public void DebugMessage(string msg) {

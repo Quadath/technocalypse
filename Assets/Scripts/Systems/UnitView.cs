@@ -13,6 +13,7 @@ public class UnitView : MonoBehaviour
     {
         UnitCore = unit;
 		UnitCore.OnMessage += OnDebugMessage;
+		UnitCore.AddOnDeathListener((Unit) => OnUnitDeath());
     }
 	
 	private void OnDestroy()
@@ -40,6 +41,13 @@ public class UnitView : MonoBehaviour
     public void OnShootVisual(Vector3 target)
     {
         // тут можна Instantiate(projectilePrefab) або LineRenderer, particle, etc.
+    }
+    
+    private void OnUnitDeath()
+    {
+	    // анімація смерті, ефект або знищення об’єкта
+		DebugUtil.Log(gameObject, $"{UnitCore.Name} died.");
+	    Destroy(gameObject);
     }
 
 	public void OnDebugMessage(string msg)

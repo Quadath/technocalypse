@@ -40,6 +40,11 @@ public class AttackBehaviour: IUnitBehaviour
 		return Target.Transform.position;
 	}
 
+	public void AddShootRequirement(Func<bool> callback)
+	{
+		shootRequirements.Add(callback);
+	}
+
 	private bool CanShoot()
     {
         foreach (var req in shootRequirements)

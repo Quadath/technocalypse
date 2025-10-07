@@ -46,8 +46,8 @@ public class UnitView : MonoBehaviour
     private void OnUnitDeath()
     {
 	    // анімація смерті, ефект або знищення об’єкта
-		DebugUtil.Log(gameObject, $"{UnitCore.Name} died.");
-	    Destroy(gameObject);
+		// DebugUtil.Log(gameObject, $"{UnitCore.Name} died.");
+	    Destroy(gameObject);g
     }
 
 	public void OnDebugMessage(string msg)

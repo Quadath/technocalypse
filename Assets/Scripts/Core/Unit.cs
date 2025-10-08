@@ -50,6 +50,7 @@ public class Unit : ITargetable
 
     public void AddBehaviour(IUnitBehaviour b) => behaviours.Add(b);
     public void AddOnDeathListener(Action<Unit> listener) => OnDeath += listener;
+    public void RemoveOnDeathListener(Action<Unit> listener) => OnDeath -= listener;
     
     public T GetBehaviour<T>() where T : class, IUnitBehaviour
     {

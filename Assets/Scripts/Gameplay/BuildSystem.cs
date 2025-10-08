@@ -7,13 +7,13 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     [SerializeField] private WorldManager worldManager;
     private BuildingGrid grid;
     private IServiceProvider services;
-    private OrderSystem orderSystem;
+    private IOrderSystem orderSystem;
     private float gridSize = 1f;
     private GameObject previewObject;
     public Camera cam;
-    public BuildingData selectedBuilding;
+    public IBuildingData selectedBuilding;
     private Vector3Int placePos;
-    public void Init(OrderSystem sys)
+    public void Init(IOrderSystem sys)
     {
         orderSystem = sys;
         orderSystem.OnStateChanged += HandleStateChange;
@@ -42,10 +42,10 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         this.services = services;
     }
 
-    public void SelectBuilding(BuildingData data)
+    public void SelectBuilding(IBuildingData data)
     {
         selectedBuilding = data;
-        Debug.Log("Selected: " + selectedBuilding.name);
+        Debug.Log("Selected: " + selectedBuilding.Name);
         Destroy(previewObject);
     }
 
@@ -60,7 +60,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         }
         else
         {
-            previewObject = Instantiate(selectedBuilding.prefab, placePos, Quaternion.identity);
+            previewObject = Instantiate(selectedBuilding.Prefab, placePos, Quaternion.identity);
             previewObject.GetComponent<TeamPainter>().Repaint(0);
         }
 
@@ -105,13 +105,13 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     void PlaceBuilding()
     {
         Building b = new Building(selectedBuilding.Name, selectedBuilding.Size, 1, selectedBuilding.HitPoints);
-        foreach (var behaviourData in selectedBuilding.behaviours) {
+        foreach (var behaviourData in selectedBuilding.Behaviours) {
             var behaviour = behaviourData.CreateBehaviour(b, services);
             b.AddBehaviour(behaviour);
         }
         
         grid.PlaceBuilding(b, placePos.x, placePos.y, placePos.z);
-        GameObject newObj = Instantiate(selectedBuilding.prefab, placePos, previewObject.transform.rotation);
+        GameObject newObj = Instantiate(selectedBuilding.Prefab, placePos, previewObject.transform.rotation);
         newObj.GetComponent<TeamPainter>().Repaint(0);
         BuildingView view = newObj.AddComponent<BuildingView>();
         view.Init(b);

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class World
+public class World: IWorld
 {
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -45,7 +45,7 @@ public class World
         return chunks[x, y, z];
     }
 
-    public Block GetBlock(int x, int y, int z)
+    public IBlock GetBlock(int x, int y, int z)
     {
         if (x < 0 || x >= Width || y < 0 || y >= Height || z < 0 || z >= Depth)
             return null;

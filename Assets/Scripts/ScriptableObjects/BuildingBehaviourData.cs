@@ -1,4 +1,4 @@
 using UnityEngine;
-public abstract class BuildingBehaviourData : ScriptableObject {
-    public abstract IBuildingBehaviour CreateBehaviour(Building owner, IServiceProvider services);
+public abstract class BuildingBehaviourData: ScriptableObject, IBuildingBehaviourData {
+    public abstract IBuildingBehaviour CreateBehaviour(IBuilding owner, IServiceProvider services);
 }

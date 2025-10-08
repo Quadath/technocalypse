@@ -1,4 +1,4 @@
-public class OrderSystem
+public class OrderSystem: IOrderSystem
 {
     public bool IsActive { get; private set; } = false;
     public event System.Action<bool> OnStateChanged;

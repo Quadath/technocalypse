@@ -25,7 +25,7 @@ public class BuildingGrid
                 {
                     if (grid[x + dx, y + dy, z + dz] != null)
                         return false; // клітина зайнята
-                    if (world.GetBlock(x + dx, y + dy, z + dz).Type != Block.BlockType.Air)
+                    if (world.GetBlock(x + dx, y + dy, z + dz).Type != BlockType.Air)
                         return false;
                 }
         return true;

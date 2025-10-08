@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building
+public class Building : IBuilding
 {
     public string Name { get; }
     public int Player { get; }

@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-[CreateAssetMenu(fileName = "UnitData", menuName = "Scriptable Objects/UnitData")]
-public class UnitData : ScriptableObject
+[CreateAssetMenu(fileName = "UnitData", menuName = "Basics/UnitData")]
+public class UnitData : ScriptableObject, IUnitData
 {
     public string UnitName;
 	public GameObject Prefab;

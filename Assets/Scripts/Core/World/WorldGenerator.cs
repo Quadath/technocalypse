@@ -16,11 +16,11 @@ public class WorldGenerator
 
                 for (int y = 0; y <= yMax; y++)
                 {
-                    Block.BlockType type;
+                    BlockType type;
 
                     // Наприклад, низ — пісок, верх — камінь
-                    if (y < yMax * 0.3f) type = Block.BlockType.Sand;
-                    else type = Block.BlockType.SandStone;
+                    if (y < yMax * 0.3f) type = BlockType.Sand;
+                    else type = BlockType.SandStone;
 
                     world.SetBlock(x, y, z, new Block(type));
                 }
@@ -28,7 +28,7 @@ public class WorldGenerator
                 // Заповнюємо решту повітрям
                 for (int y = yMax + 1; y < height; y++)
                 {
-                    world.SetBlock(x, y, z, new Block(Block.BlockType.Air));
+                    world.SetBlock(x, y, z, new Block(BlockType.Air));
                 }
             }
         }

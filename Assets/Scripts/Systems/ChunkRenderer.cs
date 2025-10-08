@@ -17,7 +17,7 @@ public class ChunkRenderer : MonoBehaviour, IChunkRenderer
     MeshRenderer mr;
     MeshCollider mc;
 
-    public void Render(World world, Vector3Int chunkNumber)
+    public void Render(IWorld world, Vector3Int chunkNumber)
     {
         width = world.ChunkSizeX;
         height = world.ChunkSizeY;
@@ -35,7 +35,7 @@ public class ChunkRenderer : MonoBehaviour, IChunkRenderer
                     Vector3Int pos = new Vector3Int(chunkNumber.x * width + x,
                             chunkNumber.y * height + y,
                             chunkNumber.z * depth + z);
-                    if (world.GetBlock(pos.x, pos.y, pos.z).Type == Block.BlockType.Air) continue;
+                    if (world.GetBlock(pos.x, pos.y, pos.z).Type == BlockType.Air) continue;
 
                     // Check 6 directions
                     for (int face = 0; face < 6; face++)
@@ -46,7 +46,7 @@ public class ChunkRenderer : MonoBehaviour, IChunkRenderer
                             n.x < 0 || n.x >= world.Width ||
                             n.y < 0 || n.y >= world.Height ||
                             n.z < 0 || n.z >= world.Depth ||
-                            world.GetBlock(n.x, n.y, n.z).Type == Block.BlockType.Air;
+                            world.GetBlock(n.x, n.y, n.z).Type == BlockType.Air;
 
                         if (neighborIsAir)
                             AddFace(new Vector3Int(x, y, z), face);

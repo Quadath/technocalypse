@@ -5,6 +5,7 @@
      public Transform Turret;
      public Unit Unit;
      private bool facedTarget = false;
+     private float rotationSpeed = 75f;
 
      void Start()
      {
@@ -22,7 +23,11 @@
              {
                  Quaternion targetRotation = Quaternion.LookRotation(direction);
 				 targetRotation *= Quaternion.Euler(0f, -90f, 0f);
-                 Turret.rotation = Quaternion.Slerp(Turret.rotation, targetRotation, 2.5f * Time.deltaTime);
+                 Turret.rotation = Quaternion.RotateTowards(
+                     Turret.rotation,           // current rotation
+                     targetRotation,            // desired rotation
+                     rotationSpeed * Time.deltaTime  // degrees per frame
+                 );
                  float angle = Quaternion.Angle(Turret.rotation, targetRotation);
                  if (angle > 1f)
                  {

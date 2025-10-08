@@ -2,6 +2,7 @@
     "name": "Gameplay",
     "rootNamespace": "",
     "references": [
+        "GUID:63ae11d32031247239e479186d6c1bc4",
         "GUID:c60fba70e70fb4205b4b39de393c01a2",
         "GUID:e459fe004662d4b6399636fa9893eb32",
         "GUID:75469ad4d38634e559750d17036d5f7c",

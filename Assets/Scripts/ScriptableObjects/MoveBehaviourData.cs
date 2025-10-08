@@ -1,11 +1,8 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "MoveBehaviourData", menuName = "UnitBehaviour/MoveBehaviourData")]
+[CreateAssetMenu(fileName = "MoveBehaviourData", menuName = "Behaviour/Unit/MoveBehaviourData")]
 public class MoveBehaviourData : ScriptableObject, IUnitBehaviourData
 {
-    [SerializeField] private UnitBehaviourType type;
-    public UnitBehaviourType Type => type;
-
     public IUnitBehaviour CreateBehaviour(Unit owner)
     {
         return new MoveBehaviour(owner);

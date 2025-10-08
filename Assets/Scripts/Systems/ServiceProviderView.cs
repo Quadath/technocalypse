@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//provides services for systems
 public class ServiceProviderView : MonoBehaviour {
     public static IServiceProvider Services { get; private set; }
 

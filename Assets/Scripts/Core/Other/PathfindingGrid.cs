@@ -19,12 +19,12 @@ public class PathfindingGrid
             return false;
 
         var block = world.GetBlock(pos.x, pos.y, pos.z);
-        if (block.Type == Block.BlockType.Air)
+        if (block.Type == BlockType.Air)
         {
             if (pos.y > 0)
             {
                 var below = world.GetBlock(pos.x, pos.y - 1, pos.z);
-                if (below.Type != Block.BlockType.Air)
+                if (below.Type != BlockType.Air)
                 {
                     if (!buildingGrid.IsCellOccupied(pos.x, pos.y, pos.z))
                         return true;

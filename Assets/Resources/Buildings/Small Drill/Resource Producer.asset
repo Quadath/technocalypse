@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b729d5939eb4755b3e7fbc9ca69522, type: 3}
-  m_Name: ResourceProducer
+  m_Name: Resource Producer
   m_EditorClassIdentifier: ScriptableObjects::ResourceProducerData
-  resource: {fileID: 11400000, guid: 63e2edc8979264e93bf4f4e9f88384a1, type: 2}
-  amountPerPeriod: 1
-  tickInterval: 2
+  resource: {fileID: 0}
+  amountPerPeriod: 0
+  tickInterval: 0

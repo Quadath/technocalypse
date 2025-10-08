@@ -2,6 +2,7 @@
     "name": "ScriptableObjects",
     "rootNamespace": "",
     "references": [
+        "GUID:63ae11d32031247239e479186d6c1bc4",
         "GUID:c60fba70e70fb4205b4b39de393c01a2"
     ],
     "includePlatforms": [],

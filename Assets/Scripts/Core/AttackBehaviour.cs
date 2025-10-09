@@ -66,7 +66,7 @@ public class AttackBehaviour: IUnitBehaviour
         if (target != null)
         {
             Target = target;
-            unit.DebugMessage($"<color=cyan>[{"AttackBehaviour"}]</color>: Target set");
+            unit.DebugMessage(GetType().Name, "Target set");
         }
         else return;
     }

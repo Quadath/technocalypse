@@ -2,9 +2,9 @@ using UnityEngine;
 
 public static class DebugUtil
 {
-    public static void Log(Object sender, string message, string color = "yellow")
-    {
-        if (sender == null)
+	public static void Log(Object sender, string source, string message, string color = "yellow")
+	{
+		if (sender == null)
         {
             Debug.Log($"<color={color}>[NULL]</color> {message}");
             return;
@@ -13,8 +13,12 @@ public static class DebugUtil
         string objName = sender.name;
         int id = sender.GetInstanceID();
 
-        Debug.Log($"<color={color}>[{objName} | ID={id}]</color> {message}", sender);
-    }
+        Debug.Log($"<color={color}>[{objName} | ID={id}]</color> <color=cyan>[{source}]</color> {message}", sender);
+	}
+	public static void Log(string source, string message, string color = "yellow")
+	{
+        Debug.Log($"<color={color}>[{source}]</color> {message}");
+	}
 
     public static void Warn(Object sender, string message)
     {

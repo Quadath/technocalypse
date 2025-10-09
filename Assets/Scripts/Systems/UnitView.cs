@@ -51,9 +51,9 @@ public class UnitView : MonoBehaviour
 	    Destroy(gameObject);
     }
 
-	public void OnDebugMessage(string msg)
+	public void OnDebugMessage(string source, string msg)
 	{
-		DebugUtil.Log(gameObject, msg);
+		DebugUtil.Log(gameObject, source, msg);
 	}
 	
 	void OnDrawGizmos()

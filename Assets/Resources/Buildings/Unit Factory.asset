@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095ae23109bed436292a2b088c6b8e58, type: 3}
   m_Name: Unit Factory
   m_EditorClassIdentifier: Gameplay::BuildingData
-  Name: Unit Factory
-  Size: {x: 2, y: 2, z: 2}
-  HitPoints: 250
+  name: Unit Factory
+  size: {x: 2, y: 2, z: 2}
+  hitPoints: 200
   prefab: {fileID: 7634420477961848288, guid: beec7774619a744da8230fec453e408f, type: 3}
+  behaviours: []

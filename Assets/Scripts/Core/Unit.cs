@@ -20,7 +20,7 @@ public class Unit : ITargetable
     private readonly List<IUnitBehaviour> behaviours = new();
     public bool IsAlive => HitPoints > 0;
 	public string Message { get; private set; }
-	public event Action<string> OnMessage;
+	public event Action<string, string> OnMessage;
     private event Action<Unit> OnDeath;
     
     public Unit(string name, int player, Transform transform, Rigidbody rigidbody, float speed, int hp)
@@ -67,7 +67,7 @@ public class Unit : ITargetable
             Die();
             return;
         } 
-		DebugMessage($"<color=cyan>[{"Unit"}]</color>: got damage. HP is {HitPoints}");
+		DebugMessage("Unit", $"got damage. HP is {HitPoints}");
     }
 
     private void Die()
@@ -75,8 +75,8 @@ public class Unit : ITargetable
         OnDeath?.Invoke(this);
     }
 
-	public void DebugMessage(string msg) {
+	public void DebugMessage(string source, string msg) {
 		Message = msg;
-		OnMessage?.Invoke(Message);
+		OnMessage?.Invoke(source, Message);
 	}
 }

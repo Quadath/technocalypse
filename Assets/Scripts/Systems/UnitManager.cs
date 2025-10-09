@@ -7,6 +7,7 @@ public class UnitManager : MonoBehaviour
     public static UnitManager Instance { get; private set; }
 
     private readonly List<Unit> units = new();
+    private List<Unit> selectedUnits = new();
 
     private void Awake()
     {
@@ -16,8 +17,8 @@ public class UnitManager : MonoBehaviour
 
     public void MoveCommand(Vector3Int pos)
     {
-        Debug.Log(pos);
-        foreach (var unit in units)
+	    DebugUtil.Log(GetType().Name, $"Move order: {pos} for {selectedUnits.Count} units.", "orange");
+        foreach (var unit in selectedUnits)
         {
 			if(unit.Player != 0) continue;
             unit.MoveTo(pos);
@@ -34,8 +35,7 @@ public class UnitManager : MonoBehaviour
         	.OrderBy(u => (u.Transform.position - self.Transform.position).sqrMagnitude)
         	.FirstOrDefault();
 	}
-
-
+	
     public void Register(Unit u)
     {
 	    units.Add(u);
@@ -59,5 +59,10 @@ public class UnitManager : MonoBehaviour
 			}
             units[i].Tick(dt);
 		}
+    }
+
+    public void SelectUnits(List<Unit> units)
+    {
+	    selectedUnits = units;
     }
 }

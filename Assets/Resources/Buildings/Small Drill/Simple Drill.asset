@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095ae23109bed436292a2b088c6b8e58, type: 3}
   m_Name: Simple Drill
   m_EditorClassIdentifier: ScriptableObjects::BuildingData
-  Name: Simple Drill
-  Size: {x: 2, y: 2, z: 2}
-  HitPoints: 125
+  name: Simple Drill
+  size: {x: 2, y: 2, z: 2}
+  hitPoints: 150
   prefab: {fileID: 5777252193406706553, guid: 4916658dc6171473aa2935e7aab4daba, type: 3}
   behaviours:
-  - {fileID: 11400000, guid: 14170f7225e19471a917ed8cace1e734, type: 2}
+  - {fileID: 11400000, guid: 2d21ea85aaf224651945ed3d4af9413e, type: 2}

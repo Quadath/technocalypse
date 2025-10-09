@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class UnitFactoryBehaviour : IBuildingBehaviour
 {
-    Building building;
-    IUnitData unitData;
+    private Building building;
+    private IUnitData unitData;
+    
 
     public UnitFactoryBehaviour(Building building)
     {

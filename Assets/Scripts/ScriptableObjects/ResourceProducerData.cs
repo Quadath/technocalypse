@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Behaviour/Building/Resource Producer")]
+[CreateAssetMenu(menuName = "Behaviour/Building/ResourceProducerData")]
 public class ResourceProducerData : BuildingBehaviourData {
     public ResourceData resource;
     public int amountPerPeriod;

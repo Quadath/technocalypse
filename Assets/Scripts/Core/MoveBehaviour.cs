@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class MoveBehaviour : IUnitBehaviour
 {
-    private readonly Unit unit;
+    private readonly IUnit unit;
     private readonly Queue<Vector3> path = new();
 
-    public MoveBehaviour(Unit unit)
+    public MoveBehaviour(IUnit unit)
     {
         this.unit = unit;
     }

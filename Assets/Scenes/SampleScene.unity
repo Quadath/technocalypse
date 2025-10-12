@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 200698474}
   - component: {fileID: 200698478}
   - component: {fileID: 200698476}
+  - component: {fileID: 200698482}
   - component: {fileID: 200698479}
   - component: {fileID: 200698480}
   - component: {fileID: 200698481}
@@ -226,6 +227,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 582491d7282c84d94a1a8b0fcd65eb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Systems::ServiceProviderView
+  consumers:
+  - {fileID: 200698472}
+  - {fileID: 200698482}
 --- !u!114 &200698478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +292,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 200698471}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c7982d729c1a414f89fde66b6633e06, type: 3}
   m_Name: 
@@ -307,7 +311,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 8513741057275037921, guid: 3d162c5d0ac20418ab599a7977d97354, type: 3}
+    m_Reference: {fileID: 3001919216989983466, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   positionAction:
     m_UseReference: 1
     m_Action:
@@ -320,6 +324,21 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 6689270773477233178, guid: 3d162c5d0ac20418ab599a7977d97354, type: 3}
+  dragThreshold: 20
+--- !u!114 &200698482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 200698471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d91c646c9d9c472c9f2676f49d52f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Systems::BuildingSpawner
+  worldManager: {fileID: 2030338558}
+  buildings: []
 --- !u!1 &257479745
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,7 +640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: 3d162c5d0ac20418ab599a7977d97354, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 1515183138}
   m_DeviceLostEvent:
@@ -635,8 +654,8 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Selection
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 330585545}
 --- !u!1 &410087039
@@ -1525,7 +1544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.36445674, b: 0.3537736, a: 0.2784314}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

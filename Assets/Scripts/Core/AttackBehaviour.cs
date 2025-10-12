@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class AttackBehaviour: IUnitBehaviour
 {
-    private readonly Unit unit;
+    private readonly IUnit unit;
     private int damage;
     private float shootSpeed;
     private float attackRange;
@@ -13,7 +13,7 @@ public class AttackBehaviour: IUnitBehaviour
 
 	private List<Func<bool>> shootRequirements = new List<Func<bool>>();
     
-    public AttackBehaviour(Unit unit, int damage, float shootSpeed, float attackRange)
+    public AttackBehaviour(IUnit unit, int damage, float shootSpeed, float attackRange)
     {
         this.unit = unit;
         this.damage = damage;

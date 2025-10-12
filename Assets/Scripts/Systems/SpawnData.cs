@@ -18,4 +18,12 @@ public class UnitSpawnData: ISpawnData
     public Vector3 Position => position;
     public Quaternion Rotation => rotation;
 }
+[System.Serializable]
+public class BuildingSpawnData
+{
+    public BuildingData buildingData;
+    public int player;
+    public Vector3Int Position;
+    public Quaternion Rotation;
+}
 

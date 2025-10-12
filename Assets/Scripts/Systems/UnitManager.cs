@@ -42,7 +42,11 @@ public class UnitManager : MonoBehaviour
 	    u.AddOnDeathListener((Unit) => Unregister(u));
     }
 
-    public void Unregister(Unit u) => units.Remove(u);
+    public void Unregister(Unit u)
+    {
+	    units.Remove(u);
+	    selectedUnits.Remove(u);
+    }
 
     // Викликаємо Tick у FixedUpdate — корисно для сумісності з фізикою
 

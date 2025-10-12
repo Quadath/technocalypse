@@ -2,19 +2,19 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Unit : ITargetable
+public class Unit : ITargetable, IUnit
 {
-    public string Name { get; }
-    public int Player;
-    public float Speed { get; }
-    public int HitPoints;
-    public int MaxHitPoints;
-	public int DetectionRange = 20;
-    public Transform Transform { get; }    // посилання на GameObject
-    public Rigidbody Rigidbody { get; }    // для фізики
-    public Vector3 NextPathPointPosition;
-    public Vector3 TargetDirection;
-    public Vector3 GoalPosition;
+    public string Name { get; private set; }
+    public int Player { get; private set; }
+    public float Speed { get; private set; }
+    public int HitPoints { get; private set; }
+    public int MaxHitPoints { get; }
+	public int DetectionRange { get; private set; } = 20;
+    public Transform Transform { get; private set; }    // посилання на GameObject
+    public Rigidbody Rigidbody { get; private set; }    // для фізики
+    public Vector3 NextPathPointPosition { get; set; }
+    public Vector3 TargetDirection { get; set; }
+    public Vector3 GoalPosition { get; set; }
     public bool HasGoal => GoalPosition != Vector3.zero;
     public PathfindingGrid PathfindingGrid;
     private readonly List<IUnitBehaviour> behaviours = new();

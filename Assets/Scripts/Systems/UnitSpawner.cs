@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class UnitSpawner : MonoBehaviour
+public class UnitSpawner : MonoBehaviour, IUnitSpawner
 {
     [SerializeField] private WorldManager manager;
 
@@ -9,13 +9,14 @@ public class UnitSpawner : MonoBehaviour
 
     void Start()
     {
+		
 		foreach (var u in units)
         {
 			SpawnAt(u.Position, u.Rotation, u.unitData, u.player);
         }
     }
 
-    public void SpawnAt(Vector3 worldPos, Quaternion rot, UnitData unitData, int player)
+    public void SpawnAt(Vector3 worldPos, Quaternion rot, IUnitData unitData, int player)
     {
 		GameObject go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
 		go.GetComponent<TeamPainter>().Repaint(player);

@@ -8,7 +8,7 @@ public class AttackBehaviourData : ScriptableObject, IUnitBehaviourData
     [SerializeField] private float attackRange;
     
 
-    public IUnitBehaviour CreateBehaviour(Unit owner)
+    public IUnitBehaviour CreateBehaviour(IUnit owner)
     {
         return new AttackBehaviour(owner, damage, shootSpeed, attackRange);
     }

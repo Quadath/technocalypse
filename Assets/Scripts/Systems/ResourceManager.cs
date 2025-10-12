@@ -19,4 +19,6 @@ public class ResourceManager : MonoBehaviour, IResourceManager
         Inventory.AddResource(name, amount);
         text.text = "" + Inventory.GetAmount(name);
     }
+    
+    public bool TrySpend(string name, int amount) => Inventory.TrySpend(name, amount);
 }

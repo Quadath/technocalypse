@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a64578eab835451ea1b874c1c97d0c2, type: 3}
   m_Name: Tank T1
   m_EditorClassIdentifier: ScriptableObjects::UnitData
-  UnitName: Tank T1
-  Prefab: {fileID: 382474950152685406, guid: 93e96108f1b044849b1b288a724c1199, type: 3}
-  Speed: 3
-  HitPoints: 90
+  unitName: Tank T1
+  prefab: {fileID: 382474950152685406, guid: 93e96108f1b044849b1b288a724c1199, type: 3}
+  speed: 3
+  hitPoints: 100
   behaviours:
   - {fileID: 11400000, guid: 0d2c6dae132934d15af2276f47b80702, type: 2}
   - {fileID: 11400000, guid: 1ac07541dceee435ead431f19443a46a, type: 2}

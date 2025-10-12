@@ -17,7 +17,8 @@
      {
          if (Unit.GetBehaviour<AttackBehaviour>().Target != null)
          {
-             Vector3 direction = Unit.GetBehaviour<AttackBehaviour>().GetTargetPosition() - Turret.position;
+             Vector3 targetPos = Unit.GetBehaviour<AttackBehaviour>().GetTargetPosition();
+             Vector3 direction = targetPos == Vector3.zero ? Turret.right : targetPos - Turret.position;
              direction.y = 0; // поворот тільки по горизонталі
              if (direction.sqrMagnitude > 0.1f)	
              {

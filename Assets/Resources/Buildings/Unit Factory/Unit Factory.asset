@@ -16,4 +16,5 @@ MonoBehaviour:
   size: {x: 2, y: 2, z: 2}
   hitPoints: 200
   prefab: {fileID: 7634420477961848288, guid: beec7774619a744da8230fec453e408f, type: 3}
-  behaviours: []
+  behaviours:
+  - {fileID: 11400000, guid: 66118d2673a1944be82fbdf0cbd61e91, type: 2}

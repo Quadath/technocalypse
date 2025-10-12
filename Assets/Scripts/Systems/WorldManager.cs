@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class WorldManager : MonoBehaviour
     public World World { get; private set; }
     public BuildingGrid BuildingGrid { get; private set; }
     public PathfindingGrid PathfindingGrid { get; private set; }
+    public event Action<WorldManager> OnGenerated; 
 
     public Material mat;
 
@@ -52,5 +54,6 @@ public class WorldManager : MonoBehaviour
     {
         WorldGenerator generator = new WorldGenerator();
         generator.Generate(World, worldWidth, worldHeight, worldDepth);
+        OnGenerated?.Invoke(this);
     }
 }

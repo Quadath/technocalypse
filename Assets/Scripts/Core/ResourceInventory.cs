@@ -2,26 +2,26 @@ using System.Collections.Generic;
 
 public class ResourceInventory
 {
-    private Dictionary<string, Resource> resources = new();
+    private Dictionary<ResourceTypeID, IResourceInstance> resources = new();
 
-    public void AddResource(string name, int amount)
+    public void AddResource(ResourceTypeID id, int amount)
     {
-        if (!resources.ContainsKey(name))
-            resources[name] = new Resource(name, 0);
+        if (!resources.ContainsKey(id))
+            resources[id] = new ResourceInstance(id, 0);
 
-        resources[name].Add(amount);
+        resources[id].Add(amount);
     }
 
-    public bool TrySpend(string name, int amount)
+    public bool TrySpend(ResourceTypeID id, int amount)
     {
-        if (!resources.ContainsKey(name)) return false;
-        return resources[name].TrySpend(amount);
+        if (!resources.ContainsKey(id)) return false;
+        return resources[id].TrySpend(amount);
     }
 
-    public int GetAmount(string name)
+    public int GetAmount(ResourceTypeID id)
     {
-        return resources.ContainsKey(name) ? resources[name].Amount : 0;
+        return resources.ContainsKey(id) ? resources[id].amount : 0;
     }
 
-    public IReadOnlyDictionary<string, Resource> GetAll() => resources;
+    public IReadOnlyDictionary<ResourceTypeID, IResourceInstance> GetAll() => resources;
 }

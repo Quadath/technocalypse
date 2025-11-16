@@ -13,7 +13,7 @@ public class UnitFactoryData : BuildingBehaviourData
     {
         var resourceManager = services.Get<IResourceManager>();
         var unitSpawner = services.Get<IUnitSpawner>();
-        return new UnitFactoryBehaviour(owner, producedUnitData, new Resource(requiredResource.name, requiredResourceCount),
+        return new UnitFactoryBehaviour(owner, producedUnitData, new ResourceInstance(requiredResource.resourceTypeID, requiredResourceCount),
             4f, resourceManager, unitSpawner);
     }
 }

@@ -4,8 +4,8 @@ public class UnitFactoryBehaviour : IBuildingBehaviour
 {
     private IBuilding building;
     private IUnitData unitData;
-    private Resource reqiuredResource;
-    private int productionCost => reqiuredResource.Amount;
+    private ResourceInstance _reqiuredResourceInstance;
+    private int productionCost => _reqiuredResourceInstance.amount;
     private float productionTime;
     private float timer;
     private bool resourcesWithdrawed = false;
@@ -13,12 +13,12 @@ public class UnitFactoryBehaviour : IBuildingBehaviour
     private IUnitSpawner spawner;
 
 
-    public UnitFactoryBehaviour(IBuilding building, IUnitData unitData, Resource reqiuredResource,
+    public UnitFactoryBehaviour(IBuilding building, IUnitData unitData, ResourceInstance reqiuredResourceInstance,
         float productionTime, IResourceManager resourceManager, IUnitSpawner spawner)
     {
         this.building = building;
         this.unitData = unitData;
-        this.reqiuredResource = reqiuredResource;
+        this._reqiuredResourceInstance = reqiuredResourceInstance;
         this.productionTime = productionTime;
         this.resourceManager = resourceManager;
         this.spawner = spawner;
@@ -29,7 +29,7 @@ public class UnitFactoryBehaviour : IBuildingBehaviour
 		if (building.Player != 0) resourcesWithdrawed = true;
         if (!resourcesWithdrawed)
         {
-            resourcesWithdrawed = resourceManager.TrySpend(reqiuredResource.Name, productionCost);
+            resourcesWithdrawed = resourceManager.TrySpend(_reqiuredResourceInstance.resourceTypeID, productionCost);
             return;
         }
 		timer += deltaTime;

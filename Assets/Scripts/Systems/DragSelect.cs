@@ -109,6 +109,7 @@ public class DragSelect : MonoBehaviour
         return screenPoint;
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     void SelectUnits()
     {
         Vector2 min = Vector2.Min(startScreenPos, endScreenPos);
@@ -139,6 +140,6 @@ public class DragSelect : MonoBehaviour
             .Select(view => view.UnitCore)
             .ToList();
         UnitManager.Instance.SelectUnits(unitCores);
-        Debug.Log("Selected " + selectedUnits.Count + " units.");
+        DebugUtil.Log(GetType().Name, $"Selected: {selectedUnits.Count} units.", "grey");
     }
 }

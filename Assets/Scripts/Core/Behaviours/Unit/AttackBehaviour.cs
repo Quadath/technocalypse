@@ -12,6 +12,7 @@ public class AttackBehaviour: IUnitBehaviour
     public ITargetable Target { get; private set; } = null;
 
 	private List<Func<bool>> shootRequirements = new List<Func<bool>>();
+	public event Action<AttackBehaviour> OnShoot;
     
     public AttackBehaviour(IUnit unit, int damage, float shootSpeed, float attackRange)
     {
@@ -59,6 +60,7 @@ public class AttackBehaviour: IUnitBehaviour
 		Target.TakeDamage(damage);
 		//unit.DebugMessage($"<color=cyan>[{"AttackBehaviour"}]</color>: Attacking");
 		delta = 1 / shootSpeed;
+		OnShoot?.Invoke(this);
 	}
     public void SetTarget(ITargetable target)
     {

@@ -2,7 +2,8 @@ using UnityEngine;
 
 public static class DebugUtil
 {
-	public static void Log(Object sender, string source, string message, string color = "yellow")
+    // ReSharper disable Unity.PerformanceAnalysis
+    public static void Log(Object sender, string source, string message, string color = "yellow")
 	{
 		if (sender == null)
         {
@@ -15,7 +16,8 @@ public static class DebugUtil
 
         Debug.Log($"<color={color}>[{objName} | ID={id}]</color> <color=cyan>[{source}]</color> {message}", sender);
 	}
-	public static void Log(string source, string message, string color = "yellow")
+    // ReSharper disable Unity.PerformanceAnalysis
+    public static void Log(string source, string message, string color = "yellow")
 	{
         Debug.Log($"<color={color}>[{source}]</color> {message}");
 	}

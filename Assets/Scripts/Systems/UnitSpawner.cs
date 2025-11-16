@@ -35,6 +35,9 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
 
         // 3) створюємо view і біндимо
         var view = go.AddComponent<UnitView>();
+		if (unitCore.GetBehaviour<AttackBehaviour>() != null) {
+			unitCore.GetBehaviour<AttackBehaviour>().OnShoot += view.OnShootVisual;
+		}
         view.Bind(unitCore);
     }
 }

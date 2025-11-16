@@ -338,7 +338,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Systems::BuildingSpawner
   worldManager: {fileID: 2030338558}
-  buildings: []
+  buildings:
+  - buildingData: {fileID: 11400000, guid: b715eb4d4ec76483296e58d3a56b6f28, type: 2}
+    player: 1
+    Position: {x: 70, y: 13, z: 4}
+    Rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &257479745
 GameObject:
   m_ObjectHideFlags: 0

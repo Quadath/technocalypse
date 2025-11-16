@@ -6,8 +6,17 @@ public class UnitView : MonoBehaviour
     public Unit UnitCore { get; set; }
     private Rigidbody rb;
     [SerializeField] private float rotationLerp = 3f;
+    private static GameObject deathExplosionPrefab;
+    private ParticleSystem shootEffect;
 
-    void Awake() => rb = GetComponent<Rigidbody>();
+    void Awake()
+    {
+	    rb = GetComponent<Rigidbody>();
+	    if (shootEffect == null)
+	    {
+		    shootEffect = GetComponentInChildren<ParticleSystem>();
+	    }
+    }
 
     public void Bind(Unit unit)
     {
@@ -27,7 +36,7 @@ public class UnitView : MonoBehaviour
         if (UnitCore == null) return;
 
         // рух через Rigidbody.MovePosition (фізичний рух)
-        Vector3 move = UnitCore.TargetDirection * UnitCore.Speed * Time.fixedDeltaTime;
+        var move = UnitCore.TargetDirection * (UnitCore.Speed * Time.fixedDeltaTime);
         rb.MovePosition(transform.position + move);
 
         // обертання в Update/FixedUpdate для плавності
@@ -39,15 +48,23 @@ public class UnitView : MonoBehaviour
     }
 
     // Візуалізація пострілу (наприклад)
-    public void OnShootVisual(Vector3 target)
+    public void OnShootVisual(AttackBehaviour b)
     {
-        // тут можна Instantiate(projectilePrefab) або LineRenderer, particle, etc.
+	    Debug.Log("Effect");
+	    if (shootEffect != null)
+		    shootEffect.Play();
     }
     
     private void OnUnitDeath(Unit unit)
     {
 	    // анімація смерті, ефект або знищення об’єкта
 		// DebugUtil.Log(gameObject, $"{UnitCore.Name} died.");
+		if (deathExplosionPrefab == null)
+		{
+			deathExplosionPrefab = Resources.Load<GameObject>("PixelExplosion");
+		}
+		if (deathExplosionPrefab != null)
+			Instantiate(deathExplosionPrefab, transform.position, Quaternion.identity);
 	    Destroy(gameObject);
     }
 

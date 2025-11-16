@@ -14,11 +14,11 @@ public class ResourceManager : MonoBehaviour, IResourceManager
         // Inventory.AddResource("Metal", 50);
     }
 
-    public void AddResource(string name, int amount)
+    public void AddResource(ResourceTypeID id, int amount)
     {
-        Inventory.AddResource(name, amount);
-        text.text = "" + Inventory.GetAmount(name);
+        Inventory.AddResource(id, amount);
+        text.text = "" + Inventory.GetAmount(id);
     }
     
-    public bool TrySpend(string name, int amount) => Inventory.TrySpend(name, amount);
+    public bool TrySpend(ResourceTypeID id, int amount) => Inventory.TrySpend(id, amount);
 }

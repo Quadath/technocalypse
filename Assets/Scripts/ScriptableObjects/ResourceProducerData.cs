@@ -9,6 +9,6 @@ public class ResourceProducerData : BuildingBehaviourData {
     public override IBuildingBehaviour CreateBehaviour(IBuilding owner, IServiceProvider services)
     {
         var manager = services.Get<IResourceManager>();
-        return new ResourceProducer(resource.name, amountPerPeriod, tickInterval, manager);
+        return new ResourceProducer(resource.resourceTypeID, amountPerPeriod, tickInterval, manager);
     }
 }

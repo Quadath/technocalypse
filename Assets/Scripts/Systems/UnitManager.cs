@@ -25,7 +25,7 @@ public class UnitManager : MonoBehaviour
         }
     }	
 
-	public Unit GetClosestEnemy(Unit self, List<Unit> units, float radius)
+	private Unit GetClosestEnemy(Unit self, List<Unit> units, float radius)
 	{
     	float radiusSqr = radius * radius;
     	return units
@@ -52,17 +52,18 @@ public class UnitManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float dt = Time.fixedDeltaTime;
-        for (int i = 0; i < units.Count; i++) {
-			AttackBehaviour attackBehaviour = units[i].GetBehaviour<AttackBehaviour>();
-			if(attackBehaviour != null) {
-				ITargetable enemy = GetClosestEnemy(units[i], units, units[i].DetectionRange);	
-				if(enemy != null) { 	
-					attackBehaviour.SetTarget(enemy);
-				}
-			}
-            units[i].Tick(dt);
-		}
+        var dt = Time.fixedDeltaTime;
+        foreach (var t in units)
+        {
+            AttackBehaviour attackBehaviour = t.GetBehaviour<AttackBehaviour>();
+            if(attackBehaviour != null) {
+                ITargetable enemy = GetClosestEnemy(t, units, t.DetectionRange);	
+                if(enemy != null) { 	
+                    attackBehaviour.SetTarget(enemy);
+                }
+            }
+            t.Tick(dt);
+        }
     }
 
     public void SelectUnits(List<Unit> units)

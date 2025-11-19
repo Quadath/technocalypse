@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd8ca6a601d7d4f8385e9b7380a9f928, type: 3}
   m_Name: Iron
   m_EditorClassIdentifier: ScriptableObjects::ResourceData
-  resouceName: 
+  resourceTypeID: 2
+  displayName: Ironn
   icon: {fileID: 0}

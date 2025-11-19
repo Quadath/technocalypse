@@ -10,6 +10,6 @@ public class AttackBehaviourData : ScriptableObject, IUnitBehaviourData
 
     public IUnitBehaviour CreateBehaviour(IUnit owner)
     {
-        return new AttackBehaviour(owner, damage, shootSpeed, attackRange);
+        return new AttackBehaviour(damage, shootSpeed, attackRange);
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BuildingView : MonoBehaviour {
+public class BuildingView : MonoBehaviour, IBuildingView {
     private Building core;
 
     public void Init(Building building) {

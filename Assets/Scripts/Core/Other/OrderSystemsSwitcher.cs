@@ -1,12 +1,13 @@
+using JetBrains.Annotations;
+
 public class OrderSystemsSwitcher
 {
-    private OrderSystem? currentSystem;
+    [CanBeNull] private OrderSystem _currentSystem;
 
     public void SwitchSystem(OrderSystem sys)
     {
-        if (currentSystem != null)
-            currentSystem.Deactivate();
-        currentSystem = sys;
-        currentSystem.Activate();
+        _currentSystem?.Deactivate();
+        _currentSystem = sys;
+        _currentSystem?.Activate();
     }
 }

@@ -228,7 +228,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Systems::ServiceProviderView
   consumers:
-  - {fileID: 200698472}
   - {fileID: 200698482}
 --- !u!114 &200698478
 MonoBehaviour:

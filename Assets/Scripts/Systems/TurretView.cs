@@ -2,44 +2,35 @@
 
  public class TurretView : MonoBehaviour
  {
-     public Transform Turret;
-     public Unit Unit;
-     private bool facedTarget = false;
-     private float rotationSpeed = 75f;
+     [SerializeField] private Transform turret;
+     
+     private readonly float _rotationSpeed = 75f;
+     
+     private Unit _unitCore;
+     private bool _facedTarget;
 
      void Start()
      {
-         Unit = GetComponent<UnitView>().UnitCore;
-         AttackBehaviour attackBehaviour = Unit.GetBehaviour<AttackBehaviour>() as AttackBehaviour;
-         attackBehaviour.AddShootRequirement(() => facedTarget);
+         _unitCore = GetComponent<UnitView>().UnitCore;
+         var attackBehaviour = _unitCore.GetBehaviour<AttackBehaviour>(); //as AttackBehaviour;
+         attackBehaviour.AddShootRequirement(() => _facedTarget);
      }
      void Update()
      {
-         if (Unit.GetBehaviour<AttackBehaviour>().Target != null)
-         {
-             Vector3 targetPos = Unit.GetBehaviour<AttackBehaviour>().GetTargetPosition();
-             Vector3 direction = targetPos == Vector3.zero ? Turret.right : targetPos - Turret.position;
-             direction.y = 0; // поворот тільки по горизонталі
-             if (direction.sqrMagnitude > 0.1f)	
-             {
-                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-				 targetRotation *= Quaternion.Euler(0f, -90f, 0f);
-                 Turret.rotation = Quaternion.RotateTowards(
-                     Turret.rotation,           // current rotation
-                     targetRotation,            // desired rotation
-                     rotationSpeed * Time.deltaTime  // degrees per frame
-                 );
-                 float angle = Quaternion.Angle(Turret.rotation, targetRotation);
-                 if (angle > 1f)
-                 {
-                     facedTarget = false;
-                 }
-                 else
-                 {
-                     facedTarget = true;
-                 }
-                 // Debug.Log($"Angle: {angle}");
-             }
-         }
+         if (_unitCore.GetBehaviour<AttackBehaviour>().Target == null) return;
+         var targetPos = _unitCore.GetBehaviour<AttackBehaviour>().GetTargetPosition();
+         var direction = targetPos == Vector3.zero ? turret.right : targetPos - turret.position;
+         direction.y = 0; // поворот тільки по горизонталі
+         if (!(direction.sqrMagnitude > 0.1f)) return;
+         var targetRotation = Quaternion.LookRotation(direction);
+         targetRotation *= Quaternion.Euler(0f, -90f, 0f);
+         turret.rotation = Quaternion.RotateTowards(
+             turret.rotation,           // current rotation
+             targetRotation,            // desired rotation
+             _rotationSpeed * Time.deltaTime  // degrees per frame
+         );
+         float angle = Quaternion.Angle(turret.rotation, targetRotation);
+         _facedTarget = (angle < 1f);
+         // Debug.Log($"Angle: {angle}");
      }
  }

@@ -4,25 +4,26 @@ using System.Collections.Generic;
 
 public class AttackBehaviour: IUnitBehaviour
 {
-    private readonly IUnit unit;
-    private int damage;
-    private float shootSpeed;
-    private float attackRange;
-    private float delta = 0f;
-    public ITargetable Target { get; private set; } = null;
-
-	private List<Func<bool>> shootRequirements = new List<Func<bool>>();
-	public event Action<AttackBehaviour> OnShoot;
+    private readonly int _damage;
+    private readonly float _shootSpeed;
+    private readonly float _attackRange;
+	private readonly List<Func<bool>> _shootRequirements;
     
-    public AttackBehaviour(IUnit unit, int damage, float shootSpeed, float attackRange)
+    private float _delta;
+    
+    public ITargetable Target { get; private set; }
+	public event Action<AttackBehaviour> OnShoot;
+
+    
+    public AttackBehaviour(int damage, float shootSpeed, float attackRange)
     {
-        this.unit = unit;
-        this.damage = damage;
-        this.shootSpeed = shootSpeed;
-        this.attackRange = attackRange;
+        _damage = damage;
+        _shootSpeed = shootSpeed;
+        _attackRange = attackRange;
+        _shootRequirements = new List<Func<bool>>();
         
-        shootRequirements.Add(() => Target != null);
-        shootRequirements.Add(() => delta <= 0);
+        AddShootRequirement(() => Target != null);
+        AddShootRequirement(() => _delta <= 0);
     }
     public void OnTick(float deltaTime)
     {
@@ -30,25 +31,25 @@ public class AttackBehaviour: IUnitBehaviour
 	    {
 		    Attack();
 	    }
-        if (delta > 0)
-            delta -= deltaTime;
+        if (_delta > 0)
+            _delta -= deltaTime;
         else
-			delta = 0;
+			_delta = 0;
     }
 
-	public Vector3 GetTargetPosition() {
-		if (Target.Transform == null) return Vector3.zero;
-		return Target.Transform.position;
-	}
+	public Vector3 GetTargetPosition()
+    {
+        return Target == null ? Vector3.zero : Target.Transform.position;
+    }
 
 	public void AddShootRequirement(Func<bool> callback)
 	{
-		shootRequirements.Add(callback);
+		_shootRequirements.Add(callback);
 	}
 
 	private bool CanShoot()
     {
-        foreach (var req in shootRequirements)
+        foreach (var req in _shootRequirements)
         {
             if (!req()) return false; // short-circuit
         }
@@ -57,20 +58,17 @@ public class AttackBehaviour: IUnitBehaviour
 
 	private void Attack()
  	{
-		Target.TakeDamage(damage);
-		//unit.DebugMessage($"<color=cyan>[{"AttackBehaviour"}]</color>: Attacking");
-		delta = 1 / shootSpeed;
+		Target.TakeDamage(_damage);
+		//_unit.DebugMessage($"<color=cyan>[{"AttackBehaviour"}]</color>: Attacking");
+		_delta = 1 / _shootSpeed;
 		OnShoot?.Invoke(this);
 	}
     public void SetTarget(ITargetable target)
     {
 		if (target == Target) return;
-        if (target != null)
-        {
-            Target = target;
-            unit.DebugMessage(GetType().Name, "Target set");
-        }
-        else return;
+        if (target == null) return;
+        Target = target;
+        // _unit.DebugMessage(GetType().DisplayedName, "Target set");
     }
 
     public void ResetTarget()

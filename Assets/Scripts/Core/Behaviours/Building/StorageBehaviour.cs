@@ -3,22 +3,18 @@ using UnityEngine;
 
 public class StorageBehaviour : IBuildingBehaviour
 {
-    private Storage _storage;
+    private readonly Storage _storage;
 
-    public StorageBehaviour(List<(ResourceTypeID id, int capacity)> storageSetup)
+    public StorageBehaviour(List<StorageCellDataPair> storageSetup, int capacity, bool strict)
     {
-        _storage = new Storage(storageSetup);
+        _storage = new Storage(storageSetup, capacity, strict);
     }
 
-    public bool TrySpend(ResourceTypeID resourceTypeID, int amount)
-    {
-        return _storage.TrySpend(resourceTypeID, amount);
-    }
+    public bool TrySpend(ResourceTypeID resourceTypeID, int amount) =>
+        _storage.TrySpend(resourceTypeID, amount);
 
-    public bool InsertResource(ResourceTypeID resourceTypeID, int amount)
-    {
-        return _storage.TrySpend(resourceTypeID, amount);
-    }
+    public bool InsertResource(ResourceTypeID resourceTypeID, int amount) =>
+        _storage.TrySpend(resourceTypeID, amount);
     public void OnTick(float deltaTime)
     {
         

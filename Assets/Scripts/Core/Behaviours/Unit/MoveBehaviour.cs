@@ -3,47 +3,44 @@ using UnityEngine;
 
 public class MoveBehaviour : IUnitBehaviour
 {
-    private readonly IUnit unit;
-    private readonly Queue<Vector3> path = new();
+    private readonly IUnit _unit;
+    private readonly Queue<Vector3> _path = new();
 
     public MoveBehaviour(IUnit unit)
     {
-        this.unit = unit;
+        _unit = unit;
     }
 
     public void SetPath(List<Vector3Int> newPath)
     {
-        path.Clear();
+        _path.Clear();
         if (newPath == null) return;
         foreach (var p in newPath)
-            path.Enqueue(new Vector3(p.x + 0.5f, p.y, p.z + 0.5f));
+            _path.Enqueue(new Vector3(p.x + 0.5f, p.y, p.z + 0.5f));
     }
 
     public void OnTick(float deltaTime)
     {
-        if (path.Count == 0) 
+        if (_path.Count == 0) 
         {
-            unit.TargetDirection = Vector3.zero;
+            _unit.TargetDirection = Vector3.zero;
             return;
         }
 
-        Vector3 target = path.Peek();
-        unit.NextPathPointPosition = target;
-        Vector3 dir = target - unit.Transform.position;
+        var target = _path.Peek();
+        _unit.NextPathPointPosition = target;
+        var dir = target - _unit.Transform.position;
         dir.y = 0f; // 2D plane movement
-        unit.TargetDirection = dir.normalized;
+        _unit.TargetDirection = dir.normalized;
 
-        if (dir.sqrMagnitude < 0.1f) // close enough
-        {
-            path.Dequeue();
-            return;
-        }
+        if (!(dir.sqrMagnitude < 0.1f)) return; 
+        _path.Dequeue(); // close enough
 
-        Vector3 move = dir.normalized * unit.Speed * deltaTime;
+        //var move = dir.normalized * _unit.Speed * deltaTime;
         // якщо хочеш не пропустити ціль при великих швидкостях:
-        // if (move.sqrMagnitude >= dir.sqrMagnitude) unit.Position = target;
-        // else unit.Position += move;
+        // if (move.sqrMagnitude >= dir.sqrMagnitude) _unit.Position = target;
+        // else _unit.Position += move;
 
-        // unit.Direction = dir.normalized;
+        // _unit.Direction = dir.normalized;
     }
 }

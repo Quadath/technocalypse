@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class Building : IBuilding
 {
-    public string Name { get; }
+    public string Name { get; private set; }
     public int Player { get; }
+    private int HitPoints { get; set; }
     public Vector3Int Origin { get; private set; }
     public Vector3Int Size { get; }
-    public int HitPoints { get; private set; }
     public int MaxHitPoints { get; private set; }
-    public GameObject GameObject;
+    public GameObject GameObject { get; }
 
     private List<IBuildingBehaviour> behaviours = new();
 
-    public Building(string name, Vector3Int size, int player, int hp)
+    public Building(string name, Vector3Int size, int player, int hp, IContext context = null)
     {
         Name = name;
         Size = size;

@@ -2,73 +2,67 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
-public class BuildSystem : ServiceConsumer, IBuildSystem
+public class BuildSystem : MonoBehaviour, IBuildSystem
 {
     [SerializeField] private WorldManager worldManager;
-    private BuildingGrid grid;
-    private IServiceProvider services;
-    private IOrderSystem orderSystem;
-	private IBuildingSpawner spawner;
-    private float gridSize = 1f;
-    private GameObject previewObject;
-	private Vector3Int blockPos;
-    private Vector3Int placePos;
-    public IBuildingData selectedBuilding;
-    public Camera cam;
+    [SerializeField] private Camera cam;
+    
+    private readonly float _gridSize = 1f;
+    
+    private BuildingGrid _grid;
+    private IOrderSystem _orderSystem;
+	private IBuildingSpawner _spawner;
+    private GameObject _previewObject;
+	private Vector3Int _blockPos;
+    private Vector3Int _placePos;
+    private IBuildingData _selectedBuilding;
 
     public void Init(IOrderSystem sys)
     {
-        orderSystem = sys;
-        orderSystem.OnStateChanged += HandleStateChange;
+        _orderSystem = sys;
+        _orderSystem.OnStateChanged += HandleStateChange;
     }
     
     void Start()
     {
-		spawner = GetComponent<IBuildingSpawner>();
-        grid = worldManager.BuildingGrid;
+		_spawner = GetComponent<IBuildingSpawner>();
+        _grid = worldManager.BuildingGrid;
     }
 
     private void HandleStateChange(bool active)
     {
         if (active)
-        { 
-            
+        {
+            _previewObject = SpawnPreviewObject();
         }
         else
         {
-            Destroy(previewObject);
+            Destroy(_previewObject);
         }
-        // Debug.Log($"BuildSystem is now {(active ? "Active" : "Inactive")}");
     }
 
     public void SelectBuilding(IBuildingData data)
     {
-        selectedBuilding = data;
-        Debug.Log("Selected: " + selectedBuilding.Name);
-        Destroy(previewObject);
+        _selectedBuilding = data;
+        Debug.Log("Selected: " + _selectedBuilding.Name);
+        Destroy(_previewObject);
+        _previewObject = SpawnPreviewObject();
     }
 
     void Update()
     {
-        if (!orderSystem.IsActive)
+        if (!_orderSystem.IsActive)
             return;
 
-        if (previewObject != null)
+        if (_previewObject)
         {
             FollowMouse();
         }
-        else
-        {
-            previewObject = Instantiate(selectedBuilding.Prefab, placePos, Quaternion.identity);
-            previewObject.GetComponent<TeamPainter>().Repaint(0);
-        }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            if (EventSystem.current.IsPointerOverGameObject())
-                return;
-            PlaceBuilding();
-        }
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        PlaceBuilding();
     }
     void FollowMouse()
     {
@@ -82,35 +76,38 @@ public class BuildSystem : ServiceConsumer, IBuildSystem
             // return hitInfo.point;
 
             // координати блоку, в який влучили
-            blockPos = new Vector3Int(
-                Mathf.FloorToInt((hitInfo.point.x - (hitInfo.normal.x / 2)) / gridSize),
-                Mathf.FloorToInt(hitInfo.point.y - (hitInfo.normal.y / 2) / gridSize),
-                Mathf.FloorToInt(hitInfo.point.z - (hitInfo.normal.z / 2) / gridSize)
+            _blockPos = new Vector3Int(
+                Mathf.FloorToInt((hitInfo.point.x - (hitInfo.normal.x / 2)) / _gridSize),
+                Mathf.FloorToInt(hitInfo.point.y - (hitInfo.normal.y / 2) / _gridSize),
+                Mathf.FloorToInt(hitInfo.point.z - (hitInfo.normal.z / 2) / _gridSize)
             );
 
-            placePos = blockPos + Vector3Int.RoundToInt(hitInfo.normal);
-			//placePos = blockPos + selectedBuilding.Size / 2;
-            Building b = new Building(selectedBuilding.Name, selectedBuilding.Size, 0, selectedBuilding.HitPoints);
-            if (grid.CanPlaceBuilding(b, placePos.x, placePos.y, placePos.z))
-            {
-                //DebugDraw.DrawCube(placePos + Vector3.one * 0.5f, 1, new Color(1, 0, 0));
-                DebugDraw.DrawCube(placePos + Vector3.one * 0.5f, 1, new Color(0, 1, 1));
+            _placePos = _blockPos + Vector3Int.RoundToInt(hitInfo.normal);
+			//_placePos = _blockPos + _selectedBuilding.Size / 2;
+            Building b = new Building(_selectedBuilding.Name, _selectedBuilding.Size, 0, _selectedBuilding.HitPoints);
+            if (!_grid.CanPlaceBuilding(b, _placePos.x, _placePos.y, _placePos.z)) return;
+            //DebugDraw.DrawCube(_placePos + Vector3.one * 0.5f, 1, new Color(1, 0, 0));
+            DebugDraw.DrawCube(_placePos + Vector3.one * 0.5f, 1, new Color(0, 1, 1));
 				
-				Vector3 worldPos = blockPos + selectedBuilding.Size / 2;
-                previewObject.transform.position = Vector3.Slerp(previewObject.transform.position, worldPos, 5 * Time.deltaTime);
-                previewObject.transform.rotation = Quaternion.identity;
-            }
-
+            Vector3 worldPos = _blockPos + _selectedBuilding.Size / 2;
+            _previewObject.transform.position = Vector3.Slerp(_previewObject.transform.position, worldPos, 5 * Time.deltaTime);
+            _previewObject.transform.rotation = Quaternion.identity;
         }
     }
 
+    private GameObject SpawnPreviewObject()
+    {
+        var obj = Instantiate(_selectedBuilding.Prefab, _placePos, Quaternion.identity);
+        obj.GetComponent<TeamPainter>().Repaint(0);
+        return obj;
+    }
 	private void OnDrawGizmos()
 	{
-		if(!previewObject) return;
-		Gizmos.DrawWireSphere(previewObject.transform.position, 0.25f);
+		if(!_previewObject) return;
+		Gizmos.DrawWireSphere(_previewObject.transform.position, 0.25f);
 	}
-    void PlaceBuilding()
+    private void PlaceBuilding()
     {
-        spawner.SpawnAt(placePos, Quaternion.identity, selectedBuilding, 0);
+        _spawner.SpawnAt(_placePos, Quaternion.identity, _selectedBuilding, 0);
     }
 }

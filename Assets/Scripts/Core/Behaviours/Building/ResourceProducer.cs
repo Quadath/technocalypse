@@ -1,26 +1,25 @@
 public class ResourceProducer : IBuildingBehaviour
 {
-    private ResourceTypeID resource;
-    private int amount;
-    private float interval;
-    private float timer;
-    private IResourceManager manager;
+    private readonly ResourceTypeID _resource;
+    private readonly int _amount;
+    private readonly float _interval;
+    private readonly IResourceManager _manager;
+    
+    private float _timer;
 
     public ResourceProducer(ResourceTypeID resource, int amount, float interval, IResourceManager manager)
     {
-        this.resource = resource;
-        this.amount = amount;
-        this.interval = interval;
-        this.manager = manager;
+        _resource = resource;
+        _amount = amount;
+        _interval = interval;
+        _manager = manager;
     }
 
     public void OnTick(float deltaTime)
     {
-        timer += deltaTime;
-        if (timer >= interval)
-        {
-            timer -= interval;
-            manager.AddResource(resource, amount);
-        }
+        _timer += deltaTime;
+        if (!(_timer >= _interval)) return;
+        _timer -= _interval;
+        _manager.AddResource(_resource, _amount);
     }
 }

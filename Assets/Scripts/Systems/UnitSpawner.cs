@@ -9,8 +9,7 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
 
     void Start()
     {
-		
-		foreach (var u in units)
+        foreach (var u in units)
         {
 			SpawnAt(u.Position, u.Rotation, u.unitData, u.player);
         }
@@ -18,11 +17,12 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
 
     public void SpawnAt(Vector3 worldPos, Quaternion rot, IUnitData unitData, int player)
     {
-		GameObject go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
-		go.GetComponent<TeamPainter>().Repaint(player);
-        Rigidbody rb = go.GetComponent<Rigidbody>();
-        Unit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints);
-        unitCore.PathfindingGrid = manager.PathfindingGrid;
+		var go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
+        var rb = go.GetComponent<Rigidbody>();
+        var unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints)
+            {
+                PathfindingGrid = manager.PathfindingGrid
+            };
 
         // 1) створюємо core
         //var move = new MoveBehaviour(unitCore);
@@ -39,5 +39,6 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
 			unitCore.GetBehaviour<AttackBehaviour>().OnShoot += view.OnShootVisual;
 		}
         view.Bind(unitCore);
+		go.GetComponent<TeamPainter>().Repaint(player);
     }
 }

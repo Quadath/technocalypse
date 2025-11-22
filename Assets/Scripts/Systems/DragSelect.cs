@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Core;
+using Game.Shared.Core;
 
 public class DragSelect : MonoBehaviour
 {
@@ -136,7 +138,7 @@ public class DragSelect : MonoBehaviour
             }
         }
 
-        List<Unit> unitCores = selectedUnits
+        List<IUnit> unitCores = selectedUnits
             .Select(view => view.UnitCore)
             .ToList();
         UnitManager.Instance.SelectUnits(unitCores);

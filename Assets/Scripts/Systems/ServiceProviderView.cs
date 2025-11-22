@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Shared.Systems;
 
 //provides services for systems
 public class ServiceProviderView : MonoBehaviour {

@@ -1,3 +1,5 @@
+ using Game.Core;
+ using Game.Shared.Core;
  using UnityEngine;
 
  public class TurretView : MonoBehaviour
@@ -6,12 +8,13 @@
      
      private readonly float _rotationSpeed = 75f;
      
-     private Unit _unitCore;
+     private IUnit _unitCore;
      private bool _facedTarget;
 
      void Start()
      {
          _unitCore = GetComponent<UnitView>().UnitCore;
+         _unitCore.AddOnDeathListener(OnUnitDeath);
          var attackBehaviour = _unitCore.GetBehaviour<AttackBehaviour>(); //as AttackBehaviour;
          attackBehaviour.AddShootRequirement(() => _facedTarget);
      }
@@ -32,5 +35,12 @@
          float angle = Quaternion.Angle(turret.rotation, targetRotation);
          _facedTarget = (angle < 1f);
          // Debug.Log($"Angle: {angle}");
+     }
+
+     private void OnUnitDeath(IUnit u)
+     {
+         DebugUtil.Log(GetType().Name, $"OnUnitDeath: {u}");
+         u.RemoveOnDeathListener(OnUnitDeath);
+         _unitCore = null;
      }
  }

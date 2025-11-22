@@ -1,4 +1,9 @@
-public interface IUnitBehaviourData
+using Game.Shared.Core;
+
+namespace Game.Shared.SO
 {
-    IUnitBehaviour CreateBehaviour(IUnit owner);
+    public interface IUnitBehaviourData
+    {
+        IUnitBehaviour CreateBehaviour(IUnit owner);
+    }
 }

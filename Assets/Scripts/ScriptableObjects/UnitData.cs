@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Shared;
+using Game.Shared.SO;
 
 [CreateAssetMenu(fileName = "UnitData", menuName = "Basics/UnitData")]
 public class UnitData : ScriptableObject, IUnitData

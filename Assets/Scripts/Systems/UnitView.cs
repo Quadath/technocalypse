@@ -1,4 +1,6 @@
 using UnityEngine;
+using Game.Core;
+using Game.Shared.Core;
 
 [RequireComponent(typeof(Rigidbody))]
 public class UnitView : MonoBehaviour
@@ -7,13 +9,15 @@ public class UnitView : MonoBehaviour
     
     private Rigidbody _rb;
     private ParticleSystem _shootEffect;
+    private Unit _test;
     
-    public Unit UnitCore { get; private set; }
+    public IUnit UnitCore { get; private set; }
     
     private static GameObject _deathExplosionPrefab;
 
     void Awake()
     {
+        _test = new Unit("penis", 0, null, null, 2, 100);
 	    _rb = GetComponent<Rigidbody>();
 	    if (!_shootEffect)
 	    {
@@ -21,10 +25,10 @@ public class UnitView : MonoBehaviour
 	    }
     }
 
-    public void Bind(Unit unit)
+    public void Bind(IUnit unit)
     {
         UnitCore = unit;
-        UnitCore.callback = (Unit u) => { DebugUtil.Log(gameObject, "Unit", "GC COLLECTED ME"); };
+        UnitCore.callback = (IUnit u) => { DebugUtil.Log(gameObject, "Unit", "GC COLLECTED ME"); };
 		// UnitCore.OnMessage += OnDebugMessage;
 		UnitCore.AddOnDeathListener(OnUnitDeath);
     }
@@ -32,7 +36,7 @@ public class UnitView : MonoBehaviour
 	private void OnDestroy()
  	{
 		// UnitCore.OnMessage -= OnDebugMessage;
-		UnitCore.RemoveOnDeathListener(OnUnitDeath);
+        UnitCore = null;
 	}
     private void FixedUpdate()
     {
@@ -56,8 +60,10 @@ public class UnitView : MonoBehaviour
 		    _shootEffect.Play();
     }
     
-    private void OnUnitDeath(Unit unit)
+    private void OnUnitDeath(IUnit unit)
     {
+        DebugUtil.Log(GetType().Name, $"OnUnitDeath: {unit}");
+        unit.RemoveOnDeathListener(OnUnitDeath);
 		if (!_deathExplosionPrefab)
 		{
 			_deathExplosionPrefab = Resources.Load<GameObject>("PixelExplosion");

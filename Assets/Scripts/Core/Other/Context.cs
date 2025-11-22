@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+
+public class Context : IContext
+{
+    private readonly Dictionary<Type, object> services = new();
+
+    public void Register<T>(T instance) where T : class {
+        services[typeof(T)] = instance;
+    }
+
+    public T Resolve<T>()
+    {
+        return (T)services[typeof(T)];
+    }
+}

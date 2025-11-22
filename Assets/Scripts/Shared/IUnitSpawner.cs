@@ -1,6 +1,10 @@
+using Game.Shared.SO;
 using UnityEngine;
 
-public interface IUnitSpawner
+namespace Game.Shared.Systems
 {
-    public void SpawnAt(Vector3 worldPos, Quaternion rot, IUnitData unitData, int player);
+    public interface IUnitSpawner
+    {
+        public void SpawnAt(Vector3 worldPos, Quaternion rot, IUnitData unitData, int player);
+    }
 }

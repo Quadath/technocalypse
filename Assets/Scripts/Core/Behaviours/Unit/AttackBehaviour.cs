@@ -1,13 +1,16 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Core;
+using Game.Shared.Core;
 
 public class AttackBehaviour: IUnitBehaviour
 {
     private readonly int _damage;
     private readonly float _shootSpeed;
     private readonly float _attackRange;
-	private readonly List<Func<bool>> _shootRequirements;
+    
+	private List<Func<bool>> _shootRequirements;
     
     private float _delta;
     
@@ -15,7 +18,7 @@ public class AttackBehaviour: IUnitBehaviour
 	public event Action<AttackBehaviour> OnShoot;
 
     
-    public AttackBehaviour(int damage, float shootSpeed, float attackRange)
+    public AttackBehaviour(IUnit core, int damage, float shootSpeed, float attackRange)
     {
         _damage = damage;
         _shootSpeed = shootSpeed;
@@ -24,6 +27,7 @@ public class AttackBehaviour: IUnitBehaviour
         
         AddShootRequirement(() => Target != null);
         AddShootRequirement(() => _delta <= 0);
+        core.AddOnDeathListener(OnCoreDied);
     }
     public void OnTick(float deltaTime)
     {
@@ -68,11 +72,24 @@ public class AttackBehaviour: IUnitBehaviour
 		if (target == Target) return;
         if (target == null) return;
         Target = target;
+        Target.AddOnDeathListener(TargetDeathListener);
         // _unit.DebugMessage(GetType().DisplayedName, "Target set");
     }
-
     public void ResetTarget()
     {
         Target = null;
     }
+
+    private void OnCoreDied(IUnit u)
+    {
+        u.RemoveOnDeathListener(OnCoreDied);
+        _shootRequirements = null;
+    }
+
+    private void TargetDeathListener(IUnit u)
+    {
+        u.RemoveOnDeathListener(TargetDeathListener);
+        Target = null;
+    }
+
 }

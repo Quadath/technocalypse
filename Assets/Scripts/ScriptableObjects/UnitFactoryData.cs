@@ -1,3 +1,4 @@
+using Game.Shared.Systems;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "UnitFactoryData", menuName = "Behaviour/Building/UnitFactoryData")]

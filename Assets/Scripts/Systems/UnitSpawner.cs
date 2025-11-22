@@ -1,5 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Game.Core;
+using Game.Shared.Core;
+using Game.Shared.SO;
+using Game.Shared.Systems;
 
 public class UnitSpawner : MonoBehaviour, IUnitSpawner
 {
@@ -19,7 +23,7 @@ public class UnitSpawner : MonoBehaviour, IUnitSpawner
     {
 		var go = Instantiate(unitData.Prefab, worldPos, Quaternion.identity);
         var rb = go.GetComponent<Rigidbody>();
-        var unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints)
+        IUnit unitCore = new Unit(unitData.UnitName, player, go.transform, rb, unitData.Speed, unitData.HitPoints)
             {
                 PathfindingGrid = manager.PathfindingGrid
             };

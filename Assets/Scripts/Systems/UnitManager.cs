@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Game.Core;
+using Game.Shared;
+using Game.Shared.Core;
 
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance { get; private set; }
 
-    private readonly List<Unit> units = new();
-    private List<Unit> selectedUnits = new();
+    private readonly List<IUnit> units = new();
+    private List<IUnit> selectedUnits = new();
 
     private void Awake()
     {
@@ -25,7 +28,7 @@ public class UnitManager : MonoBehaviour
         }
     }	
 
-	private Unit GetClosestEnemy(Unit self, List<Unit> units, float radius)
+	private IUnit GetClosestEnemy(IUnit self, List<IUnit> units, float radius)
 	{
     	float radiusSqr = radius * radius;
     	return units
@@ -36,15 +39,18 @@ public class UnitManager : MonoBehaviour
         	.FirstOrDefault();
 	}
 	
-    public void Register(Unit u)
+    public void Register(IUnit u)
     {
 	    units.Add(u);
-	    u.AddOnDeathListener((Unit) => Unregister(u));
+	    u.AddOnDeathListener(Unregister);
     }
 
-    public void Unregister(Unit u)
+    public void Unregister(IUnit u)
     {
-	    units.Remove(u);
+        DebugUtil.Log(GetType().Name, $"Unregistered unit: {u}");
+        u.RemoveOnDeathListener(Unregister);
+        bool removed = units.Remove(u);
+        Debug.Log("Removed? " + removed);
 	    selectedUnits.Remove(u);
     }
 
@@ -66,7 +72,7 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void SelectUnits(List<Unit> units)
+    public void SelectUnits(List<IUnit> units)
     {
 	    selectedUnits = units;
     }

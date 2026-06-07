@@ -15,6 +15,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     private GameObject _previewObject;
 	private Vector3Int _blockPos;
     private Vector3Int _placePos;
+    private Vector3Int _worldPos;
     private IBuildingData _selectedBuilding;
 
     public void Init(IOrderSystem sys)
@@ -33,6 +34,7 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
     {
         if (active)
         {
+            if (!HasSelectedBuilding()) return;
             _previewObject = SpawnPreviewObject();
         }
         else
@@ -53,14 +55,18 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         if (!_orderSystem.IsActive)
             return;
 
-        if (_previewObject)
+        if (_previewObject != null  && HasSelectedBuilding())
         {
             FollowMouse();
         }
 
+        if (!HasSelectedBuilding()) return;
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
+        if (EventSystem.current.IsPointerOverGameObject()) return;
+        Building b = new Building(_selectedBuilding.Name, _selectedBuilding.Size, 0, _selectedBuilding.HitPoints);
+
+        if (!_grid.CanPlaceBuilding(b, _placePos.x, _placePos.y, _placePos.z)) return;
+
         PlaceBuilding();
     }
     void FollowMouse()
@@ -73,7 +79,8 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 50, groundLayerMask))
         {
             // return hitInfo.point;
-
+            Building b = new Building(_selectedBuilding.Name, _selectedBuilding.Size, 0, _selectedBuilding.HitPoints);
+            
             // координати блоку, в який влучили
             _blockPos = new Vector3Int(
                 Mathf.FloorToInt((hitInfo.point.x - (hitInfo.normal.x / 2)) / _gridSize),
@@ -81,15 +88,15 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
                 Mathf.FloorToInt(hitInfo.point.z - (hitInfo.normal.z / 2) / _gridSize)
             );
 
-            _placePos = _blockPos + Vector3Int.RoundToInt(hitInfo.normal);
-			//_placePos = _blockPos + _selectedBuilding.Size / 2;
-            Building b = new Building(_selectedBuilding.Name, _selectedBuilding.Size, 0, _selectedBuilding.HitPoints);
+            _placePos = _blockPos + Vector3Int.RoundToInt(hitInfo.normal); //де має стояти кут будівлі
+
+
+
             if (!_grid.CanPlaceBuilding(b, _placePos.x, _placePos.y, _placePos.z)) return;
-            //DebugDraw.DrawCube(_placePos + Vector3.one * 0.5f, 1, new Color(1, 0, 0));
-            DebugDraw.DrawCube(_placePos + Vector3.one * 0.5f, 1, new Color(0, 1, 1));
+            DebugDraw.DrawCube(_placePos, .1f, new Color(1, 0, 0));
 				
-            Vector3 worldPos = _blockPos + _selectedBuilding.Size / 2;
-            _previewObject.transform.position = Vector3.Slerp(_previewObject.transform.position, worldPos, 5 * Time.deltaTime);
+            _worldPos = _blockPos + _selectedBuilding.Size / 2; //координати центру будівлі на scene
+            _previewObject.transform.position = Vector3.Slerp(_previewObject.transform.position, _worldPos, 5 * Time.deltaTime);
             _previewObject.transform.rotation = Quaternion.identity;
         }
     }
@@ -100,13 +107,21 @@ public class BuildSystem : MonoBehaviour, IBuildSystem
         obj.GetComponent<TeamPainter>().Repaint(0);
         return obj;
     }
+
+    private void PlaceBuilding()
+    {
+        _spawner.SpawnAt(_placePos, Quaternion.identity, _selectedBuilding, 0);
+    }
+
+    private bool HasSelectedBuilding()
+    {
+        return _selectedBuilding is UnityEngine.Object unityObject && unityObject != null;
+    }
+
 	private void OnDrawGizmos()
 	{
 		if(!_previewObject) return;
 		Gizmos.DrawWireSphere(_previewObject.transform.position, 0.25f);
 	}
-    private void PlaceBuilding()
-    {
-        _spawner.SpawnAt(_placePos, Quaternion.identity, _selectedBuilding, 0);
-    }
+
 }
